@@ -1,0 +1,10 @@
+[package]
+name = "algorithms"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+serde = { version = "1.0.219" }
+rayon = "1.10.0"
+num-bigint = "0.4"
+num = "0.4"
