@@ -1,2 +1,2 @@
-# This is the solution to the Coursera Algorithms (equivalent to CS161). I'll be implementing it in Rust.
+#### This is the solution to the Coursera Algorithms (equivalent to CS161). I'll be implementing it in Rust.
 - This repository contains approximately 16 programming problem sets. I'll create one, create the corresponding files, and then write a complete test set.
