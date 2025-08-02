@@ -1,2 +1,2 @@
-# 这是Coursera Algorithms(等同于cs161)算法的解决方案，我将会使用rust来实现
-- 该存储库大概有16个编程问题集，我会创建一个create，创建相应的文件，再写上完整的测试集
+# This is the solution to the Coursera Algorithms (equivalent to CS161). I'll be implementing it in Rust.
+- This repository contains approximately 16 programming problem sets. I'll create one, create the corresponding files, and then write a complete test set.
