@@ -1,4 +1,5 @@
-//！ It currently cannot calculate very large numbers, it just simply implements the Karatsuba algorithm.
+//！It currently cannot calculate very large numbers
+//! It just simply implements the Karatsuba algorithm.
 
 use num::pow;
 use std::cmp::max;
@@ -23,6 +24,7 @@ pub fn split_at(a: u128, b: usize) -> (u128, u128) {
     (high, low)
 }
 
+// O(n^{2}) ==> O(n^{1.585})
 pub fn karatsuba(a: u128, b: u128) -> u128 {
     if a < 10 || b < 10 {
         return a * b;

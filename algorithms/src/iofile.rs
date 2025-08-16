@@ -1,18 +1,17 @@
-use std::fs::File;
-use std::io::{self, Read, Result};
+use std::fs;
+use std::io;
 
-fn process_file() -> Result<()> {
-    Ok(())
+#[allow(unused)]
+pub fn read_block_file() {
+    unimplemented!();
 }
 
-fn block_process() {
-    
-}
+pub fn read_file(path_: &str) -> io::Result<Vec<i128>> {
+    let contents = fs::read_to_string(path_)?;
+    let nums: Vec<i128> = contents
+        .lines()
+        .filter_map(|line| line.trim().parse::<i128>().ok())
+        .collect();
 
-#[cfg(test)]
-mod test {
-    use super::*;
-
-    #[test]
-    fn test() {}
+    Ok(nums)
 }
