@@ -11,7 +11,7 @@ pub trait Graph {
 }
 
 pub struct UnGraph {
-    adj: Vec<Vec<usize>>,
+    pub adj: Vec<Vec<usize>>,
 }
 
 pub struct DiGraph {
@@ -25,6 +25,10 @@ pub struct WeightGraph<W> {
 impl UnGraph {
     pub fn new(n: usize) -> Self {
         Self { adj: vec![Vec::new(); n] }
+    }
+
+    pub fn from_adj(adj: Vec<Vec<usize>>) -> Self {
+        Self { adj }
     }
 }
 
