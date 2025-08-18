@@ -53,9 +53,16 @@ TEST(MultUnitTest, Scc) {
     std::vector<std::vector<int>> adj;
     adj = algorithms::read_edge_mmap(outline);
 
-    std::vector<int> scc = kosaraju_scc();
-    std::vector<int> answer = [434821, 968, 459, 313, 211];
-    EXPECT_EQ(scc, answer);
+    algorithms::Kosaraju solver((int)adj.size(), adj);
+    auto ans = solver.find_acc();
+    std::vector<int> result;
+    for (auto& comp : ans) {
+        for (int v : comp) {
+            result.push_back(v);
+        }
+    }
+    std::vector<int> answer = {434821, 968, 459, 313, 211};
+    EXPECT_EQ(result, answer);
 }
 
 int main(int argc, char **argv) {

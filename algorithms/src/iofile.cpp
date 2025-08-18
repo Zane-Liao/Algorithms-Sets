@@ -4,7 +4,7 @@
 #include <sstream>
 #include <vector>
 #include <string>
-#include <bits/stdc++.h>
+// #include <bits/stdc++.h>
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -46,7 +46,7 @@ namespace algorithms {
         fstat(fd, &sb);
         size_t sz = sb.st_size;
         // mmap syscall
-        char* data = static_cast<char*>mmap(nullptr, sz, PROT_READ, MAP_PRIVATE, fd, 0);
+        char* data = static_cast<char*>(mmap(nullptr, sz, PROT_READ, MAP_PRIVATE, fd, 0));
         if (data == MAP_FAILED) {
             close(fd);
             throw std::runtime_error("ERROR!!! Falied to mmap file");
@@ -72,11 +72,11 @@ namespace algorithms {
             }
             x = val;
             return true;
-        }
+        };
 
         while (readInt(u) && readInt(v)) {
             --u, --v;
-            int n = max(u+1, v+1);
+            int n = fmax(u+1, v+1);
             if ((int)adj.size() < n) adj.resize(n);
             adj[u].push_back(v);
         }

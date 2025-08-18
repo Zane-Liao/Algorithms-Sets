@@ -41,11 +41,22 @@ namespace algorithms {
 
 
     // scc algorithm define
-    void dfs();
+    std::vector<std::vector<int>> read_edge_mmap(const std::string& filename);
 
-    void dfs2();
+    class Kosaraju {
+        public:
+            Kosaraju(int n, std::vector<std::vector<int>>& edges);
 
-    std::vector<std::vector<int>> kosaraju_scc();
+            void dfs1(int u);
+            void dfs2(int u, std::vector<int>& comp);
+
+            std::vector<std::vector<int>> find_acc();
+
+        private:
+            std::vector<std::vector<int>> adj, rev;
+            std::vector<int> vis, order;
+            int n;
+    };
 
 } // namespace algorithms
 
