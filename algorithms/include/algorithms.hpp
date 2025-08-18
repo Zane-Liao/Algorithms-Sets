@@ -1,7 +1,7 @@
-// #ifndef ALGORITHMS_SETS
-// #define ALGORITHMS_SETS
+#ifndef ALGORITHMS_SETS
+#define ALGORITHMS_SETS
 
-#pragma once
+// #pragma once
 
 #include <cstdint>
 #include <utility>
@@ -14,7 +14,7 @@
 
 namespace algorithms {
 
-    // karatsuba algorithms define
+    // karatsuba algorithm define
     std::size_t digits(const mpz_class& num);
 
     std::pair<mpz_class, mpz_class> split_at(const mpz_class& a, std::size_t b);
@@ -39,6 +39,14 @@ namespace algorithms {
 
     int karger_min_cut(Graph g);
 
+
+    // scc algorithm define
+    void dfs();
+
+    void dfs2();
+
+    std::vector<std::vector<int>> kosaraju_scc();
+
 } // namespace algorithms
 
-// #endif // ALGORITHMS_SETS
+#endif // ALGORITHMS_SETS

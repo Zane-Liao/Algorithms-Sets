@@ -48,6 +48,16 @@ TEST(MultUnitTest, Karger) {
     EXPECT_EQ(min_cut, 17);
 }
 
+TEST(MultUnitTest, Scc) {
+    std::string outline = (std::filesystem::path(SOURCE_DIR) / "problemFile/scc.txt").string();
+    std::vector<std::vector<int>> adj;
+    adj = algorithms::read_edge_mmap(outline);
+
+    std::vector<int> scc = kosaraju_scc();
+    std::vector<int> answer = [434821, 968, 459, 313, 211];
+    EXPECT_EQ(scc, answer);
+}
+
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
