@@ -8,6 +8,7 @@
 namespace algorithms {
 
     Kosaraju::Kosaraju(int n, std::vector<std::vector<int>>& edges) {
+        // private member n
         this->n = n;
         adj.assign(n + 1, {});
         rev.assign(n + 1, {});

@@ -58,6 +58,12 @@ namespace algorithms {
             int n;
     };
 
+    // Define Djikstra's algorithm
+    std::vector<std::vector<std::pair<int, int>>> read_adj_weight(const std::string& filename);
+
+    // To Only use non-negative weights
+    std::vector<int> dijkstra(int n, int start, std::vector<std::vector<std::pair<int, int>>> adj);
+
 } // namespace algorithms
 
 #endif // ALGORITHMS_SETS

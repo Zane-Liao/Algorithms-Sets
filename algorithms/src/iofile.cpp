@@ -91,4 +91,32 @@ namespace algorithms {
         return adj;
     }
 
+    std::vector<std::vector<std::pair<int, int>>> read_adj_weight(const std::string& filename) {
+        std::ifstream infile(filename);
+        if (!infile) {
+            throw std::runtime_error("ERROR!!! Can not open file: " + filename);
+        }
+    
+        std::vector<std::vector<std::pair<int, int>>> adj(201);
+    
+        std::string outline;
+        while (std::getline(infile, outline)) {
+            std::istringstream iss(outline);
+            int vertex;
+            iss >> vertex;
+            int neighbor, weight;
+    
+            std::string token;
+            while (iss >> token) {
+                auto pos = token.find(',');
+                if (pos == std::string::npos) continue;
+                neighbor = std::stoi(token.substr(0, pos));
+                weight   = std::stoi(token.substr(pos + 1));
+                adj[vertex].emplace_back(neighbor, weight);
+            }
+        }
+        return adj;
+    }
+    
+
 } // namespace algorithms
