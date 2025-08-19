@@ -108,10 +108,16 @@ namespace algorithms {
     
             std::string token;
             while (iss >> token) {
+                // find substr, size_t ',' index
                 auto pos = token.find(',');
+                // if '.' does not exist => continue
                 if (pos == std::string::npos) continue;
+                // std::string translat int
+                // substr() => token = 80,982, find() = 2
+                // neighbor= 80, weight = 982
                 neighbor = std::stoi(token.substr(0, pos));
-                weight   = std::stoi(token.substr(pos + 1));
+                weight = std::stoi(token.substr(pos + 1));
+                // Construct elements directly within collections(fast)
                 adj[vertex].emplace_back(neighbor, weight);
             }
         }
