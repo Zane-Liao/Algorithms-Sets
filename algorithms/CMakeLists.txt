@@ -7,6 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 find_package(GTest REQUIRED)
 
 set(CMAKE_OSX_ARCHITECTURES "arm64")
+set(CMAKE_BUILD_TYPE Debug)
 
 include_directories(include/)
 include_directories(/opt/homebrew/include)

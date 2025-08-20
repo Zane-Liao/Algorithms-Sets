@@ -123,6 +123,5 @@ namespace algorithms {
         }
         return adj;
     }
-    
 
 } // namespace algorithms

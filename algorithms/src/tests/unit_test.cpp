@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include <filesystem>
+#include <chrono>
 
 TEST(MultUnitTest, Karatsuba1) {
     EXPECT_EQ(algorithms::karatsuba(20, 20), 400);
@@ -22,42 +23,11 @@ TEST(MultUnitTest, Karatsuba2) {
     EXPECT_EQ(algorithms::karatsuba(a, b), r);
 }
 
-TEST(MultUnitTest, Karger) {
-    std::string outline1 = (std::filesystem::path(SOURCE_DIR) / "problemFile/kargerMinCut.txt").string();
-    std::vector<std::vector<int>> adj1;
-
-    try {
-        adj1 = algorithms::read_adj_list_from_file(outline1);
-    } catch (const std::exception& e) {
-        std::cerr << e.what() << std::endl;
-        return;
-    }
-
-    // seed
-    srand(time(NULL));
-
-    algorithms::Graph g;
-
-    g.V = adj1.size();
-    g.adj = adj1;
-    int min_cut = karger_min_cut(g);
-    std::cout << min_cut << std::endl;
-
-    // Note: Tests failures are normal
-    // Please test a few more times => ./algorithms
-    EXPECT_EQ(min_cut, 17);
-}
-
 TEST(MultUnitTest, Dijkstra) {
-    std::string outline2 = (std::filesystem::path(SOURCE_DIR) / "problemFile/dijkstraData.txt").string();
-    std::vector<std::vector<std::pair<int, int>>> adj2;
+    std::string outline = (std::filesystem::path(SOURCE_DIR) / "problemFile/dijkstraData.txt").string();
+    std::vector<std::vector<std::pair<int, int>>> adj;
 
-    try {
-        adj2 = algorithms::read_adj_weight(outline2);
-    } catch (const std::exception& e) {
-        std::cerr << e.what() << std::endl;
-        return;
-    }
+    adj = algorithms::read_adj_weight(outline);
 
     // for (auto& neighbors : adj) {
     //     for (auto& edge : neighbors) {
@@ -67,7 +37,7 @@ TEST(MultUnitTest, Dijkstra) {
     //     }
     // }
 
-    auto dist = algorithms::dijkstra(200, 1, adj2);
+    auto dist = algorithms::dijkstra(200, 1, adj);
     std::vector<int> select_dist = {
         dist[7], dist[37], dist[59], dist[82], dist[99],
         dist[115], dist[133], dist[165], dist[188], dist[197]
@@ -77,12 +47,43 @@ TEST(MultUnitTest, Dijkstra) {
     EXPECT_EQ(select_dist, answer1);
 }
 
-TEST(MultUnitTest, Scc) {
-    std::string outline3 = (std::filesystem::path(SOURCE_DIR) / "problemFile/scc.txt").string();
-    std::vector<std::vector<int>> adj3;
-    adj3 = algorithms::read_edge_mmap(outline3);
+TEST(MultUnitTest, Median) {
+    std::string outline = (std::filesystem::path(SOURCE_DIR) / "problemFile/Median.txt").string();
 
-    algorithms::Kosaraju solver((int)adj3.size(), adj3);
+    auto num_heap = algorithms::read_numbers<std::vector<int>>(outline);
+
+    auto num_tree = algorithms::read_numbers<std::multiset<int>>(outline);
+    
+}
+
+TEST(MultUnitTest, Karger) {
+    std::string outline = (std::filesystem::path(SOURCE_DIR) / "problemFile/kargerMinCut.txt").string();
+    std::vector<std::vector<int>> adj;
+
+    adj = algorithms::read_adj_list_from_file(outline);
+
+    // seed
+    srand(time(NULL));
+
+    algorithms::Graph g;
+
+    g.V = adj.size();
+    g.adj = adj;
+    int min_cut = karger_min_cut(g);
+    std::cout << min_cut << std::endl;
+
+    // Note: Tests failures are normal
+    // Please test a few more times => ./algorithms
+    EXPECT_EQ(min_cut, 17);
+}
+
+TEST(MultUnitTest, Scc) {
+    std::string outline = (std::filesystem::path(SOURCE_DIR) / "problemFile/scc.txt").string();
+    std::vector<std::vector<int>> adj;
+    
+    adj = algorithms::read_edge_mmap(outline);
+
+    algorithms::Kosaraju solver((int)adj.size(), adj);
     auto ans = solver.find_acc();
     std::vector<int> result;
     for (auto& comp : ans) {

@@ -3,12 +3,19 @@
 
 // #pragma once
 
+#include <set>
+#include <queue>
+#include <cmath>
+#include <vector>
+#include <algorithm>
+#include <chrono>
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
 #include <cstdint>
 #include <utility>
-#include <algorithm>
-#include <cmath>
 #include <cstddef>
-#include <vector>
 #include <gmpxx.h>
 #include <time.h>
 
@@ -63,6 +70,70 @@ namespace algorithms {
 
     // To Only use non-negative weights
     std::vector<int> dijkstra(int n, int start, std::vector<std::vector<std::pair<int, int>>> adj);
+
+
+    // Define Median maintenance algorithm
+    template<typename Container>
+    Container read_numbers(const std::string& filename) {
+        std::ifstream infile(filename);
+        if (!infile) {
+            throw std::runtime_error("ERROR!!! Can not open file: " + filename);
+        }
+
+        Container c;
+        std::string outline;
+
+        while (std::getline(infile, outline)) {
+            std::istringstream iss(outline);
+            int x;
+            while (iss >> x) {
+                if constexpr (std::is_same_v<Container, std::multiset<int>>) {
+                    c.insert(x);
+                } else if (std::is_same_v<Container, std::vector<int>>) {
+                    c.push_back(x);
+                }
+            }
+        }
+
+        return c;
+    }
+
+    class MedianHeap {
+        public:
+            std::vector<int> insert();
+            
+            std::vector<int> get_median();
+
+        private:
+            std::priority_queue<int> _left_heap;
+            std::priority_queue<int, std::vector<int>, std::greater<>> _right_heap;
+    };
+
+    class MedianBST {
+        public:
+            std::vector<int> insert();
+
+            std::vector<int> get_median();
+    };
+
+    template<typename Median>
+    void benchmark_median(const std::vector<int>& nums, const std::string& name) {
+        Median median;
+        long long sum = 0;
+
+        auto start = std::chrono::high_resolution_clock::now();
+
+        for (int x : nums) {
+            median.insert(x);
+            sum += median.get_median();
+        }
+
+        auto end = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+
+        std::cout << name <<  " result = " << (sum % 10000) << ", time = " << duration.count() << " ms\n";
+
+    }
 
 } // namespace algorithms
 
