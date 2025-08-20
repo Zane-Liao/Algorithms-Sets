@@ -1,1 +1,1 @@
-- This repository has about 16 programming problem sets, I will create a create, create the corresponding files, and then write a complete test set
+- This repository contains some implementations of my commonly used algorithms and classic teaching algorithms, as well as some data structures. In the future, I want to develop it into my own algorithm library.

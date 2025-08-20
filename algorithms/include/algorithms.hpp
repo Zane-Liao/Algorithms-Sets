@@ -100,9 +100,9 @@ namespace algorithms {
 
     class MedianHeap {
         public:
-            std::vector<int> insert();
+            void insert(int x);
             
-            std::vector<int> get_median();
+            int get_median() const;
 
         private:
             std::priority_queue<int> _left_heap;
@@ -111,13 +111,16 @@ namespace algorithms {
 
     class MedianBST {
         public:
-            std::vector<int> insert();
+            void insert(int x);
 
-            std::vector<int> get_median();
+            int get_median() const;
+        private:
+            std::multiset<int> data;
+            std::multiset<int>::iterator mid;
     };
 
     template<typename Median>
-    void benchmark_median(const std::vector<int>& nums, const std::string& name) {
+    void benchmark_median(const std::vector<int> nums, const std::string& name) {
         Median median;
         long long sum = 0;
 
@@ -132,7 +135,6 @@ namespace algorithms {
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
 
         std::cout << name <<  " result = " << (sum % 10000) << ", time = " << duration.count() << " ms\n";
-
     }
 
 } // namespace algorithms

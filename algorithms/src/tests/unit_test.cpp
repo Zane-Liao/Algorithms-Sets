@@ -51,9 +51,31 @@ TEST(MultUnitTest, Median) {
     std::string outline = (std::filesystem::path(SOURCE_DIR) / "problemFile/Median.txt").string();
 
     auto num_heap = algorithms::read_numbers<std::vector<int>>(outline);
+    long long _sum_heap = 0;
 
-    auto num_tree = algorithms::read_numbers<std::multiset<int>>(outline);
-    
+    algorithms::MedianHeap heap;
+    for (int num : num_heap) {
+        heap.insert( num );
+        _sum_heap += heap.get_median();
+    }
+    // std::cout << "heap result = " << ( _sum_heap % 10000 ) << std::endl;
+
+    EXPECT_EQ((_sum_heap % 10000), 1213);
+
+    auto num_bst = algorithms::read_numbers<std::vector<int>>(outline);
+    long long _sum_bst = 0;
+
+    algorithms::MedianBST bst;
+    for (int num : num_bst) {
+        bst.insert( num );
+        _sum_bst += bst.get_median();
+    }
+    // std::cout << "bst result = " << ( _sum_bst % 10000 ) << std::endl;
+
+    EXPECT_EQ((_sum_bst % 10000), 1213);
+
+    algorithms::benchmark_median<algorithms::MedianHeap>(num_heap, "heap");
+    algorithms::benchmark_median<algorithms::MedianBST>(num_bst, "bst");
 }
 
 TEST(MultUnitTest, Karger) {
