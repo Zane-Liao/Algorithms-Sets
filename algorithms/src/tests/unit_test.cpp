@@ -47,14 +47,26 @@ TEST(MultUnitTest, Dijkstra) {
     EXPECT_EQ(select_dist, answer1);
 }
 
+TEST(MultUnitTest, 2Sum) {
+    std::string outline = (std::filesystem::path(SOURCE_DIR) / "problemFile/algo1-programming_prob-2sum.txt").string();
+
+    auto nums = algorithms::read_numbers<std::vector<long long>>(outline);
+
+    std::cout << nums.size() << std::endl;
+
+    int count = algorithms::two_sum(nums);
+
+    EXPECT_EQ(count, 427);
+}
+
 TEST(MultUnitTest, Median) {
     std::string outline = (std::filesystem::path(SOURCE_DIR) / "problemFile/Median.txt").string();
 
-    auto num_heap = algorithms::read_numbers<std::vector<int>>(outline);
+    auto num_heap = algorithms::read_numbers<std::vector<long long>>(outline);
     long long _sum_heap = 0;
 
     algorithms::MedianHeap heap;
-    for (int num : num_heap) {
+    for (long long num : num_heap) {
         heap.insert( num );
         _sum_heap += heap.get_median();
     }
@@ -62,11 +74,11 @@ TEST(MultUnitTest, Median) {
 
     EXPECT_EQ((_sum_heap % 10000), 1213);
 
-    auto num_bst = algorithms::read_numbers<std::vector<int>>(outline);
+    auto num_bst = algorithms::read_numbers<std::vector<long long>>(outline);
     long long _sum_bst = 0;
 
     algorithms::MedianBST bst;
-    for (int num : num_bst) {
+    for (long long num : num_bst) {
         bst.insert( num );
         _sum_bst += bst.get_median();
     }

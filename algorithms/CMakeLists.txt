@@ -20,9 +20,21 @@ file(GLOB SOURCES
 
 add_executable(algorithms ${SOURCES})
 
+include(FetchContent)
+
+FetchContent_Declare(
+  abseil
+  GIT_REPOSITORY https://github.com/abseil/abseil-cpp.git
+  GIT_TAG        master
+)
+
+FetchContent_MakeAvailable(abseil)
+
 target_link_libraries(algorithms
     GTest::gtest
     GTest::gtest_main
+    absl::flat_hash_map
+    absl::flat_hash_set
     gmp
     gmpxx
 )

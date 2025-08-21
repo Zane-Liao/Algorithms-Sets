@@ -18,6 +18,7 @@
 #include <cstddef>
 #include <gmpxx.h>
 #include <time.h>
+#include "absl/container/flat_hash_map.h"
 
 namespace algorithms {
 
@@ -85,12 +86,14 @@ namespace algorithms {
 
         while (std::getline(infile, outline)) {
             std::istringstream iss(outline);
-            int x;
+            long long x;
             while (iss >> x) {
-                if constexpr (std::is_same_v<Container, std::multiset<int>>) {
+                if constexpr (std::is_same_v<Container, std::multiset<long long>>) {
                     c.insert(x);
-                } else if (std::is_same_v<Container, std::vector<int>>) {
+                } else if constexpr (std::is_same_v<Container, std::vector<long long>>) {
                     c.push_back(x);
+                } else if constexpr (std::is_same_v<Container, absl::flat_hash_map<int, int>>) {
+                    c[x]++;
                 }
             }
         }
@@ -100,33 +103,33 @@ namespace algorithms {
 
     class MedianHeap {
         public:
-            void insert(int x);
+            void insert(long long x);
             
-            int get_median() const;
+            long long get_median() const;
 
         private:
-            std::priority_queue<int> _left_heap;
-            std::priority_queue<int, std::vector<int>, std::greater<>> _right_heap;
+            std::priority_queue<long long> _left_heap;
+            std::priority_queue<long long, std::vector<long long>, std::greater<>> _right_heap;
     };
 
     class MedianBST {
         public:
-            void insert(int x);
+            void insert(long long x);
 
-            int get_median() const;
+            long long get_median() const;
         private:
-            std::multiset<int> data;
-            std::multiset<int>::iterator mid;
+            std::multiset<long long> data;
+            std::multiset<long long>::iterator mid;
     };
 
     template<typename Median>
-    void benchmark_median(const std::vector<int> nums, const std::string& name) {
+    void benchmark_median(const std::vector<long long> nums, const std::string& name) {
         Median median;
         long long sum = 0;
 
         auto start = std::chrono::high_resolution_clock::now();
 
-        for (int x : nums) {
+        for (long long x : nums) {
             median.insert(x);
             sum += median.get_median();
         }
@@ -136,6 +139,9 @@ namespace algorithms {
 
         std::cout << name <<  " result = " << (sum % 10000) << ", time = " << duration.count() << " ms\n";
     }
+
+    // Define 2-sum Algorithm
+    int two_sum(std::vector<long long>& nums);
 
 } // namespace algorithms
 

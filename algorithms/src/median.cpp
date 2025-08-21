@@ -6,7 +6,7 @@
 
 namespace algorithms {
 
-    void MedianHeap::insert(int x) {
+    void MedianHeap::insert(long long x) {
 
         if ( _left_heap.empty() || x <= _left_heap.top() ) {
             _left_heap.push( x );
@@ -24,12 +24,12 @@ namespace algorithms {
 
     }
 
-    int MedianHeap::get_median() const {
+    long long MedianHeap::get_median() const {
         return _left_heap.top();
     }
 
     // #if BST
-    void MedianBST::insert(int x) {
+    void MedianBST::insert(long long x) {
 
         if ( data.empty() ) {
             data.insert( x );
@@ -53,7 +53,7 @@ namespace algorithms {
     // #endif
 
     // #if BST
-    int MedianBST::get_median() const {
+    long long MedianBST::get_median() const {
         return *mid;
     }
     // #endif
