@@ -39,6 +39,8 @@ target_link_libraries(algorithms
     gmpxx
 )
 
+add_compile_definitions(RUN_TEST_MINCUT)
+
 # Path
 add_definitions(-DSOURCE_DIR="${CMAKE_SOURCE_DIR}")
 

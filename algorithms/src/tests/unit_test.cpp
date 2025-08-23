@@ -1,3 +1,9 @@
+// Note: Tests failures are normal
+// Run all tests with one click. Some algorithms are random,
+// so please test them several times. => ./algorithms
+// Running a Single Test => 
+// ./algorithms --gtest_filter=MultUnitTest.Scc
+
 #include "algorithms.hpp"
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
@@ -8,14 +14,20 @@
 #include <filesystem>
 #include <chrono>
 
-TEST(MultUnitTest, Karatsuba1) {
+// This algorithm is random and the test is prone to errors.
+// If you don't want it to affect you, please change the value.
+// The default is 2 compilation, or check CmakeLists.txt to change
+// add_compile_definitions(RUN_TEST_MINCUT=nums)
+#define RUN_TEST_MINCUT 1
+
+TEST(MultUnitTest1, Karatsuba1) {
     EXPECT_EQ(algorithms::karatsuba(20, 20), 400);
     EXPECT_EQ(algorithms::karatsuba(15, 20), 300);
     EXPECT_EQ(algorithms::karatsuba(400, 500), 200000);
     EXPECT_EQ(algorithms::karatsuba(400, 500), 200000);
 }
 
-TEST(MultUnitTest, Karatsuba2) {
+TEST(MultUnitTest1, Karatsuba2) {
     mpz_class a("3141592653589793238462643383279502884197169399375105820974944592");
     mpz_class b("2718281828459045235360287471352662497757247093699959574966967627");
     mpz_class r("8539734222673567065463550869546574495034888535765114961879601127067743044893204848617875072216249073013374895871952806582723184");
@@ -23,7 +35,7 @@ TEST(MultUnitTest, Karatsuba2) {
     EXPECT_EQ(algorithms::karatsuba(a, b), r);
 }
 
-TEST(MultUnitTest, Dijkstra) {
+TEST(MultUnitTest1, Dijkstra) {
     std::string outline = (std::filesystem::path(SOURCE_DIR) / "problemFile/dijkstraData.txt").string();
     std::vector<std::vector<std::pair<int, int>>> adj;
 
@@ -47,7 +59,7 @@ TEST(MultUnitTest, Dijkstra) {
     EXPECT_EQ(select_dist, answer1);
 }
 
-TEST(MultUnitTest, 2Sum) {
+TEST(MultUnitTest1, 2Sum) {
     std::string outline = (std::filesystem::path(SOURCE_DIR) / "problemFile/algo1-programming_prob-2sum.txt").string();
 
     auto nums = algorithms::read_numbers<std::vector<long long>>(outline);
@@ -59,7 +71,7 @@ TEST(MultUnitTest, 2Sum) {
     EXPECT_EQ(count, 427);
 }
 
-TEST(MultUnitTest, Median) {
+TEST(MultUnitTest1, Median) {
     std::string outline = (std::filesystem::path(SOURCE_DIR) / "problemFile/Median.txt").string();
 
     auto num_heap = algorithms::read_numbers<std::vector<long long>>(outline);
@@ -90,7 +102,8 @@ TEST(MultUnitTest, Median) {
     algorithms::benchmark_median<algorithms::MedianBST>(num_bst, "bst");
 }
 
-TEST(MultUnitTest, Karger) {
+#if RUN_TEST_MINCUT == 2
+TEST(MultUnitTest1, Karger) {
     std::string outline = (std::filesystem::path(SOURCE_DIR) / "problemFile/kargerMinCut.txt").string();
     std::vector<std::vector<int>> adj;
 
@@ -110,8 +123,9 @@ TEST(MultUnitTest, Karger) {
     // Please test a few more times => ./algorithms
     EXPECT_EQ(min_cut, 17);
 }
+#endif
 
-TEST(MultUnitTest, Scc) {
+TEST(MultUnitTest1, Scc) {
     std::string outline = (std::filesystem::path(SOURCE_DIR) / "problemFile/scc.txt").string();
     std::vector<std::vector<int>> adj;
     
@@ -125,11 +139,31 @@ TEST(MultUnitTest, Scc) {
             result.push_back(v);
         }
     }
+
     std::vector<int> answer2 = {434821, 968, 459, 313, 211};
     EXPECT_EQ(result, answer2);
 }
 
-int main(int argc, char **argv) {
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
+// ---------------------------------------------------------------------------------------------------------------------------------------
+
+TEST(MultUnitTest1, MiniWeightSum) {
+    std::string outline = (std::filesystem::path(SOURCE_DIR) / "problemFile/jobs.txt").string();
+
+    auto num_weight = algorithms::read_weight_ungraph<std::vector<std::pair<double, double>>>(outline);
+
+    long long sum_diff = algorithms::mini_weight_sum_diff(num_weight);
+    EXPECT_EQ(sum_diff, 69119377652);
+
+    long long sum_scale = algorithms::mini_weight_sum_scale(num_weight);
+    EXPECT_EQ(sum_scale, 67311454237);
+}
+
+TEST(MultUnitTest2, Prim) {
+    std::string outline = (std::filesystem::path(SOURCE_DIR) / "problemFile/edges.txt").string();
+
+    auto num_ungraph = algorithms::read_weight_ungraph<std::vector<std::vector<std::pair<long long, long long>>>>(outline);
+
+    long long sum_cost = algorithms::prim(num_ungraph);
+
+    EXPECT_EQ(sum_cost, -3612829);
 }

@@ -143,6 +143,50 @@ namespace algorithms {
     // Define 2-sum Algorithm
     int two_sum(std::vector<long long>& nums);
 
+
+    // Read weight and ungraph
+    template<typename Container>
+    Container read_weight_ungraph(const std::string& filename) {
+        std::ifstream infile(filename);
+        if (!infile) {
+            throw std::runtime_error("ERROR!!! Can not open file: " + filename);
+        }
+
+        Container c;
+
+        std::string outline;
+        while (std::getline(infile, outline)) {
+            std::istringstream iss(outline);
+
+            if constexpr (std::is_same_v<Container, std::vector<std::pair<double, double>>>) {
+                int n, w;
+                while (iss >> n >> w) {
+                    c.push_back({n, w});
+                }
+            } else if constexpr (std::is_same_v<Container, std::vector<std::vector<std::pair<long long, long long>>>>) {
+                int u, v, w;
+                while (iss >> u >> v >> w) {
+                    c[u].push_back({w, v});
+                    c[v].push_back({w, u});   
+                }
+            }
+        }
+
+        return c;
+    }
+
+    // Define Greedy Algorithms
+    // looking for minimizing the weighted sum of completion times
+    long long mini_weight_sum_diff(std::vector<std::pair<double, double>> nums);
+
+    // Optimal version algorithm
+    long long mini_weight_sum_scale(std::vector<std::pair<double, double>> nums);
+
+    // Define Prim's algorithm(Minimum spanning tree)
+    void spainning_tree();
+
+    long long prim(std::vector<std::vector<std::pair<int, int>>>);
+
 } // namespace algorithms
 
 #endif // ALGORITHMS_SETS
