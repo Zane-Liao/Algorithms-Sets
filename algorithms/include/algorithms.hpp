@@ -9,6 +9,7 @@
 #include <vector>
 #include <algorithm>
 #include <chrono>
+#include <concepts>
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -65,6 +66,7 @@ namespace algorithms {
             std::vector<int> vis, order;
             int n;
     };
+
 
     // Define Djikstra's algorithm
     std::vector<std::vector<std::pair<int, int>>> read_adj_weight(const std::string& filename);
@@ -140,6 +142,7 @@ namespace algorithms {
         std::cout << name <<  " result = " << (sum % 10000) << ", time = " << duration.count() << " ms\n";
     }
 
+
     // Define 2-sum Algorithm
     int two_sum(std::vector<long long>& nums);
 
@@ -155,6 +158,9 @@ namespace algorithms {
         Container c;
 
         std::string outline;
+        int max_node = 0;
+
+        std::vector<std::tuple<long long, long long, long long>> edges;
         while (std::getline(infile, outline)) {
             std::istringstream iss(outline);
 
@@ -166,14 +172,25 @@ namespace algorithms {
             } else if constexpr (std::is_same_v<Container, std::vector<std::vector<std::pair<long long, long long>>>>) {
                 int u, v, w;
                 while (iss >> u >> v >> w) {
-                    c[u].push_back({w, v});
-                    c[v].push_back({w, u});   
+                    u--; v--;
+                    edges.push_back({u, v, w});
+                    max_node = std::max({max_node, u, v});
+                }
+            }
+
+            if constexpr (std::is_same_v<Container, std::vector<std::vector<std::pair<long long, long long>>>>) {
+                c.resize(max_node + 1);
+                for (auto [u, v, w] : edges) {
+                    // pair<v, w>
+                    c[u].push_back({v, w});
+                    c[v].push_back({u, w});
                 }
             }
         }
 
         return c;
     }
+
 
     // Define Greedy Algorithms
     // looking for minimizing the weighted sum of completion times
@@ -182,10 +199,9 @@ namespace algorithms {
     // Optimal version algorithm
     long long mini_weight_sum_scale(std::vector<std::pair<double, double>> nums);
 
-    // Define Prim's algorithm(Minimum spanning tree)
-    void spainning_tree();
 
-    long long prim(std::vector<std::vector<std::pair<int, int>>>);
+    // Define Prim's minimum spanning tree algorithm
+    long long prim(std::vector<std::vector<std::pair<long long, long long>>> adj_);
 
 } // namespace algorithms
 

@@ -20,14 +20,14 @@
 // add_compile_definitions(RUN_TEST_MINCUT=nums)
 #define RUN_TEST_MINCUT 1
 
-TEST(MultUnitTest1, Karatsuba1) {
+TEST(MultUnitTest, Karatsuba1) {
     EXPECT_EQ(algorithms::karatsuba(20, 20), 400);
     EXPECT_EQ(algorithms::karatsuba(15, 20), 300);
     EXPECT_EQ(algorithms::karatsuba(400, 500), 200000);
     EXPECT_EQ(algorithms::karatsuba(400, 500), 200000);
 }
 
-TEST(MultUnitTest1, Karatsuba2) {
+TEST(MultUnitTest, Karatsuba2) {
     mpz_class a("3141592653589793238462643383279502884197169399375105820974944592");
     mpz_class b("2718281828459045235360287471352662497757247093699959574966967627");
     mpz_class r("8539734222673567065463550869546574495034888535765114961879601127067743044893204848617875072216249073013374895871952806582723184");
@@ -35,7 +35,7 @@ TEST(MultUnitTest1, Karatsuba2) {
     EXPECT_EQ(algorithms::karatsuba(a, b), r);
 }
 
-TEST(MultUnitTest1, Dijkstra) {
+TEST(MultUnitTest, Dijkstra) {
     std::string outline = (std::filesystem::path(SOURCE_DIR) / "problemFile/dijkstraData.txt").string();
     std::vector<std::vector<std::pair<int, int>>> adj;
 
@@ -59,7 +59,7 @@ TEST(MultUnitTest1, Dijkstra) {
     EXPECT_EQ(select_dist, answer1);
 }
 
-TEST(MultUnitTest1, 2Sum) {
+TEST(MultUnitTest, 2Sum) {
     std::string outline = (std::filesystem::path(SOURCE_DIR) / "problemFile/algo1-programming_prob-2sum.txt").string();
 
     auto nums = algorithms::read_numbers<std::vector<long long>>(outline);
@@ -71,7 +71,7 @@ TEST(MultUnitTest1, 2Sum) {
     EXPECT_EQ(count, 427);
 }
 
-TEST(MultUnitTest1, Median) {
+TEST(MultUnitTest, Median) {
     std::string outline = (std::filesystem::path(SOURCE_DIR) / "problemFile/Median.txt").string();
 
     auto num_heap = algorithms::read_numbers<std::vector<long long>>(outline);
@@ -103,7 +103,7 @@ TEST(MultUnitTest1, Median) {
 }
 
 #if RUN_TEST_MINCUT == 2
-TEST(MultUnitTest1, Karger) {
+TEST(MultUnitTest, Karger) {
     std::string outline = (std::filesystem::path(SOURCE_DIR) / "problemFile/kargerMinCut.txt").string();
     std::vector<std::vector<int>> adj;
 
@@ -125,7 +125,7 @@ TEST(MultUnitTest1, Karger) {
 }
 #endif
 
-TEST(MultUnitTest1, Scc) {
+TEST(MultUnitTest, Scc) {
     std::string outline = (std::filesystem::path(SOURCE_DIR) / "problemFile/scc.txt").string();
     std::vector<std::vector<int>> adj;
     
@@ -146,7 +146,7 @@ TEST(MultUnitTest1, Scc) {
 
 // ---------------------------------------------------------------------------------------------------------------------------------------
 
-TEST(MultUnitTest1, MiniWeightSum) {
+TEST(MultUnitTest, MiniWeightSum) {
     std::string outline = (std::filesystem::path(SOURCE_DIR) / "problemFile/jobs.txt").string();
 
     auto num_weight = algorithms::read_weight_ungraph<std::vector<std::pair<double, double>>>(outline);
@@ -158,12 +158,14 @@ TEST(MultUnitTest1, MiniWeightSum) {
     EXPECT_EQ(sum_scale, 67311454237);
 }
 
-TEST(MultUnitTest2, Prim) {
+TEST(MultUnitTest, Prim) {
     std::string outline = (std::filesystem::path(SOURCE_DIR) / "problemFile/edges.txt").string();
 
     auto num_ungraph = algorithms::read_weight_ungraph<std::vector<std::vector<std::pair<long long, long long>>>>(outline);
 
     long long sum_cost = algorithms::prim(num_ungraph);
+
+    std::cout << "sum cost: " << sum_cost << std::endl;
 
     EXPECT_EQ(sum_cost, -3612829);
 }

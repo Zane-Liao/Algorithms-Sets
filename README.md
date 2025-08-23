@@ -1,1 +1,2 @@
-- This repository contains some implementations of my commonly used algorithms and classic teaching algorithms, as well as some data structures. In the future, I want to develop it into my own algorithm library.
+- This experimental repository contains some implementations of my commonly used algorithms and classic teaching algorithms, as well as some data structures.
+- This small experimental repository is updated from time to time and will use the latest C++ features (c++11-c++26) to write experimental programs, such as template metaprogramming and generics, some RAII of data structures, compiler optimization and expansion, parallelization and multithreading, etc.
