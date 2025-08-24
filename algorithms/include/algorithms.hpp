@@ -139,6 +139,7 @@ namespace algorithms {
     template <std::ranges::range Container>
     Container read_tsp(const std::string& filename);
 
+
     // Define 2SAT problem
     std::pair<std::vector<std::vector<int>>, std::vector<std::vector<int>>>
     read_two_sat(const std::string& filename);

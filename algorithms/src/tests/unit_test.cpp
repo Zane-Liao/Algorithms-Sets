@@ -236,13 +236,13 @@ TEST(MultUnitTest, Graph) {
 TEST(MultUnitTest, Tsp1) {
     std::string outline = (std::filesystem::path(SOURCE_DIR) / "problemFile/tsp.txt").string();
     auto tsp_num = algorithms::read_tsp<std::vector<std::pair<double, double>>>(outline);
-    std::cout << "large: " << tsp_num.size() << std::endl;
+    std::cout << "Tsp1: " << tsp_num.size() << std::endl;
 }
 
 TEST(MultUnitTest, Tsp2) {
     std::string outline = (std::filesystem::path(SOURCE_DIR) / "problemFile/nn.txt").string();
     auto tsp_num = algorithms::read_tsp<std::vector<std::tuple<int, double, double>>>(outline);
-    std::cout << "large: " << tsp_num.size() << std::endl;
+    std::cout << "Tsp2: " << tsp_num.size() << std::endl;
 }
 
 TEST(MultUnitTest, Twosat) {
