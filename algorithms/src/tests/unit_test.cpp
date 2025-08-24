@@ -10,9 +10,12 @@
 #include "gmpxx.h"
 #include <iostream>
 #include <string>
+#include <array>
 #include <vector>
+#include <algorithm>
 #include <filesystem>
 #include <chrono>
+// #include <bits/stdc++.h>
 
 // This algorithm is random and the test is prone to errors.
 // If you don't want it to affect you, please change the value.
@@ -168,4 +171,91 @@ TEST(MultUnitTest, Prim) {
     std::cout << "sum cost: " << sum_cost << std::endl;
 
     EXPECT_EQ(sum_cost, -3612829);
+}
+
+TEST(MultUnitTest, Kmeans) {
+    std::string outline = (std::filesystem::path(SOURCE_DIR) / "problemFile/clustering1.txt").string();
+
+    std::string big_outline = (std::filesystem::path(SOURCE_DIR) / "problemFile/clustering_big.txt").string();
+
+    auto num_k = algorithms::read_file_kmeans<std::vector<std::vector<int>>>(outline);
+    std::cout << "num_k: " << num_k.size() << std::endl;
+    // auto sum_k = algorithms::read_file_kmeans<std::vector<std::vector<int>>>(num_k);
+    // EXPECT_EQ(sum_k, 106);
+
+    auto big_num_k = algorithms::read_file_kmeans<std::vector<std::array<int, 24>>>(big_outline);
+    std::cout << "big_num_k: " << big_num_k.size() << std::endl;
+    // auto big_sum_k = algorithms::k_means<std::vector<std::array<int, 24>>>(big_num_k);
+    // EXPECT_EQ(big_sum_k, 6118);
+}
+
+TEST(MultUnitTest, Huffman) {
+    std::string outline = (std::filesystem::path(SOURCE_DIR) / "problemFile/huffman.txt").string();
+
+    auto huffman_weight = algorithms::read_numbers<std::vector<long long>>(outline);
+
+    std::cout << "huffman weight: " << huffman_weight.size() << std::endl;
+}
+
+TEST(MultUnitTest, Mwis) {
+    std::string outline = (std::filesystem::path(SOURCE_DIR) / "problemFile/mwis.txt").string();
+
+    auto mwis = algorithms::read_numbers<std::vector<long long>>(outline);
+
+    std::cout << "mwis: " << mwis.size() << std::endl;
+}
+
+TEST(MultUnitTest, Knapsack) {
+    std::string outline = (std::filesystem::path(SOURCE_DIR) / "problemFile/knapsack1.txt").string();
+    auto knapsack = algorithms::read_weight_ungraph<std::vector<std::pair<double, double>>>(outline);
+    std::cout << "knapsack: " << knapsack.size() << std::endl;
+
+    std::string big_outline = (std::filesystem::path(SOURCE_DIR) / "problemFile/knapsack_big.txt").string();
+    auto big_knapsack = algorithms::read_weight_ungraph<std::vector<std::pair<double, double>>>(big_outline);
+    std::cout << "big knapsack: " << big_knapsack.size() << std::endl;
+}
+
+TEST(MultUnitTest, Graph) {
+    std::string outline_g1 = (std::filesystem::path(SOURCE_DIR) / "problemFile/g1.txt").string();
+    auto g1 = algorithms::read_graph<std::vector<std::vector<std::pair<int, int>>>>(outline_g1);
+    std::cout << "g1: " << g1.size() << std::endl;
+
+    std::string outline_g2 = (std::filesystem::path(SOURCE_DIR) / "problemFile/g2.txt").string();
+    auto g2 = algorithms::read_graph<std::vector<std::vector<std::pair<int, int>>>>(outline_g2);
+    std::cout << "g2: " << g2.size() << std::endl;
+
+    std::string outline_g3 = (std::filesystem::path(SOURCE_DIR) / "problemFile/g3.txt").string();
+    auto g3 = algorithms::read_graph<std::vector<std::vector<std::pair<int, int>>>>(outline_g3);
+    std::cout << "g3: " << g3.size() << std::endl;
+
+    std::string outline_large = (std::filesystem::path(SOURCE_DIR) / "problemFile/large.txt").string();
+    auto large = algorithms::read_graph<std::vector<std::vector<std::pair<int, int>>>>(outline_large);
+    std::cout << "large: " << large.size() << std::endl;
+}
+
+TEST(MultUnitTest, Tsp1) {
+    std::string outline = (std::filesystem::path(SOURCE_DIR) / "problemFile/tsp.txt").string();
+    auto tsp_num = algorithms::read_tsp<std::vector<std::pair<double, double>>>(outline);
+    std::cout << "large: " << tsp_num.size() << std::endl;
+}
+
+TEST(MultUnitTest, Tsp2) {
+    std::string outline = (std::filesystem::path(SOURCE_DIR) / "problemFile/nn.txt").string();
+    auto tsp_num = algorithms::read_tsp<std::vector<std::tuple<int, double, double>>>(outline);
+    std::cout << "large: " << tsp_num.size() << std::endl;
+}
+
+TEST(MultUnitTest, Twosat) {
+    std::string outline1 = (std::filesystem::path(SOURCE_DIR) / "problemFile/2sat1.txt").string();
+    std::string outline2 = (std::filesystem::path(SOURCE_DIR) / "problemFile/2sat2.txt").string();
+    std::string outline3 = (std::filesystem::path(SOURCE_DIR) / "problemFile/2sat3.txt").string();
+    std::string outline4 = (std::filesystem::path(SOURCE_DIR) / "problemFile/2sat4.txt").string();
+    std::string outline5 = (std::filesystem::path(SOURCE_DIR) / "problemFile/2sat5.txt").string();
+    std::string outline6 = (std::filesystem::path(SOURCE_DIR) / "problemFile/2sat6.txt").string();
+    auto two_sat_1 = algorithms::read_two_sat(outline1);
+    auto two_sat_2 = algorithms::read_two_sat(outline2);
+    auto two_sat_3 = algorithms::read_two_sat(outline3);
+    auto two_sat_4 = algorithms::read_two_sat(outline4);
+    auto two_sat_5 = algorithms::read_two_sat(outline5);
+    auto two_sat_6 = algorithms::read_two_sat(outline6);
 }

@@ -1,7 +1,4 @@
-#ifndef ALGORITHMS_SETS
-#define ALGORITHMS_SETS
-
-// #pragma once
+#pragma once
 
 #include <set>
 #include <queue>
@@ -9,6 +6,7 @@
 #include <vector>
 #include <algorithm>
 #include <chrono>
+#include <ranges> // std::range::range => STL
 #include <concepts>
 #include <iostream>
 #include <fstream>
@@ -76,32 +74,8 @@ namespace algorithms {
 
 
     // Define Median maintenance algorithm
-    template<typename Container>
-    Container read_numbers(const std::string& filename) {
-        std::ifstream infile(filename);
-        if (!infile) {
-            throw std::runtime_error("ERROR!!! Can not open file: " + filename);
-        }
-
-        Container c;
-        std::string outline;
-
-        while (std::getline(infile, outline)) {
-            std::istringstream iss(outline);
-            long long x;
-            while (iss >> x) {
-                if constexpr (std::is_same_v<Container, std::multiset<long long>>) {
-                    c.insert(x);
-                } else if constexpr (std::is_same_v<Container, std::vector<long long>>) {
-                    c.push_back(x);
-                } else if constexpr (std::is_same_v<Container, absl::flat_hash_map<int, int>>) {
-                    c[x]++;
-                }
-            }
-        }
-
-        return c;
-    }
+    template<std::ranges::range Container>
+    Container read_numbers(const std::string& filename);
 
     class MedianHeap {
         public:
@@ -124,23 +98,8 @@ namespace algorithms {
             std::multiset<long long>::iterator mid;
     };
 
-    template<typename Median>
-    void benchmark_median(const std::vector<long long> nums, const std::string& name) {
-        Median median;
-        long long sum = 0;
-
-        auto start = std::chrono::high_resolution_clock::now();
-
-        for (long long x : nums) {
-            median.insert(x);
-            sum += median.get_median();
-        }
-
-        auto end = std::chrono::high_resolution_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-
-        std::cout << name <<  " result = " << (sum % 10000) << ", time = " << duration.count() << " ms\n";
-    }
+    template<class Median>
+    void benchmark_median(const std::vector<long long> nums, const std::string& name);
 
 
     // Define 2-sum Algorithm
@@ -148,49 +107,8 @@ namespace algorithms {
 
 
     // Read weight and ungraph
-    template<typename Container>
-    Container read_weight_ungraph(const std::string& filename) {
-        std::ifstream infile(filename);
-        if (!infile) {
-            throw std::runtime_error("ERROR!!! Can not open file: " + filename);
-        }
-
-        Container c;
-
-        std::string outline;
-        int max_node = 0;
-
-        std::vector<std::tuple<long long, long long, long long>> edges;
-        while (std::getline(infile, outline)) {
-            std::istringstream iss(outline);
-
-            if constexpr (std::is_same_v<Container, std::vector<std::pair<double, double>>>) {
-                int n, w;
-                while (iss >> n >> w) {
-                    c.push_back({n, w});
-                }
-            } else if constexpr (std::is_same_v<Container, std::vector<std::vector<std::pair<long long, long long>>>>) {
-                int u, v, w;
-                while (iss >> u >> v >> w) {
-                    u--; v--;
-                    edges.push_back({u, v, w});
-                    max_node = std::max({max_node, u, v});
-                }
-            }
-
-            if constexpr (std::is_same_v<Container, std::vector<std::vector<std::pair<long long, long long>>>>) {
-                c.resize(max_node + 1);
-                for (auto [u, v, w] : edges) {
-                    // pair<v, w>
-                    c[u].push_back({v, w});
-                    c[v].push_back({u, w});
-                }
-            }
-        }
-
-        return c;
-    }
-
+    template<std::ranges::range Container>
+    Container read_weight_ungraph(const std::string& filename);
 
     // Define Greedy Algorithms
     // looking for minimizing the weighted sum of completion times
@@ -203,6 +121,26 @@ namespace algorithms {
     // Define Prim's minimum spanning tree algorithm
     long long prim(std::vector<std::vector<std::pair<long long, long long>>> adj_);
 
-} // namespace algorithms
 
-#endif // ALGORITHMS_SETS
+    // Define k-means clustering algorithm
+    template <std::ranges::range Container>
+    Container read_file_kmeans(const std::string& filename);
+
+    // template <std::ranges::range Container>
+    // Container k_means(Container container);
+
+
+    // Define the all-pairs shortest-path problem
+    template <std::ranges::range Container>
+    Container read_graph(const std::string& filename);
+
+
+    // Define tsp Problem
+    template <std::ranges::range Container>
+    Container read_tsp(const std::string& filename);
+
+    // Define 2SAT problem
+    std::pair<std::vector<std::vector<int>>, std::vector<std::vector<int>>>
+    read_two_sat(const std::string& filename);
+
+} // namespace algorithms

@@ -2,9 +2,14 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <array>
 #include <vector>
+#include <ranges>
+#include <algorithm>
+#include <stdexcept>
 #include <string>
-// #include <bits/stdc++.h>
+#include <type_traits>
+#include <string>
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -123,5 +128,261 @@ namespace algorithms {
         }
         return adj;
     }
+
+    template<std::ranges::range Container>
+    Container read_numbers(const std::string& filename) {
+        std::ifstream infile(filename);
+        if (!infile) {
+            throw std::runtime_error("ERROR!!! Can not open file: " + filename);
+        }
+
+        Container c;
+        std::string outline;
+
+        while (std::getline(infile, outline)) {
+            std::istringstream iss(outline);
+            long long x;
+            while (iss >> x) {
+                if constexpr (std::is_same_v<Container, std::multiset<long long>>) {
+                    c.insert(x);
+                } else if constexpr (std::is_same_v<Container, std::vector<long long>>) {
+                    c.push_back(x);
+                } else if constexpr (std::is_same_v<Container, absl::flat_hash_map<int, int>>) {
+                    c[x]++;
+                }
+            }
+        }
+
+        return c;
+    }
+
+    template<std::ranges::range Container>
+    Container read_weight_ungraph(const std::string& filename) {
+        std::ifstream infile(filename);
+        if (!infile) {
+            throw std::runtime_error("ERROR!!! Can not open file: " + filename);
+        }
+
+        Container c;
+
+        std::string outline;
+        int max_node = 0;
+
+        std::vector<std::tuple<long long, long long, long long>> edges;
+        while (std::getline(infile, outline)) {
+            std::istringstream iss(outline);
+
+            if constexpr (std::is_same_v<Container, std::vector<std::pair<double, double>>>) {
+                int n, w;
+                while (iss >> n >> w) {
+                    c.push_back({n, w});
+                }
+            } else if constexpr (std::is_same_v<Container, std::vector<std::vector<std::pair<long long, long long>>>>) {
+                int u, v, w;
+                while (iss >> u >> v >> w) {
+                    u--; v--;
+                    edges.push_back({u, v, w});
+                    max_node = std::max({max_node, u, v});
+                }
+            }
+
+            if constexpr (std::is_same_v<Container, std::vector<std::vector<std::pair<long long, long long>>>>) {
+                c.resize(max_node + 1);
+                for (auto [u, v, w] : edges) {
+                    // pair<v, w>
+                    c[u].push_back({v, w});
+                    c[v].push_back({u, w});
+                }
+            }
+        }
+
+        return c;
+    }
+
+    template <std::ranges::range Container>
+    Container read_file_kmeans(const std::string& filename) {
+        std::ifstream infile(filename);
+        if (!infile) {
+            throw std::runtime_error("ERROR!!! Can not open file: " + filename);
+        }
+
+        Container c;
+        std::string outline;
+
+        while (std::getline(infile, outline)) {
+            std::istringstream iss(outline);
+
+            if constexpr (std::is_same_v<Container, std::vector<std::vector<int>>>) {
+                int u, v, w;
+                int max_node = 0;
+                std::vector<std::tuple<int, int, int>> edges;
+
+                if (!(iss >> u >> v >> w)) continue;
+                edges.push_back({u, v, w});
+                max_node = std::max({max_node, u, v});
+
+                c.assign(max_node+1, std::vector<int>(max_node+1, 0));
+
+                for (auto [a, b, wt] : edges) {
+                    c[a][b] = wt;
+                    c[b][a] = wt;
+                }
+
+            } else if constexpr (std::is_same_v<Container, std::vector<std::array<int, 24>>>) {
+                std::array<int, 24> row{};
+                for (int i = 0; i < 24; ++i) {
+                    iss >> row[i];
+                }
+                c.push_back(row);
+            }
+        }
+
+        return c;
+    }
+
+    template <std::ranges::range Container>
+    Container read_graph(const std::string& filename) {
+        std::ifstream infile(filename);
+        if (!infile) {
+            throw std::runtime_error("ERROR!!! Can not open file: " + filename);
+        }
+    
+        int n, m;
+        infile >> n >> m;
+    
+        if constexpr (std::is_same_v<Container, std::vector<std::vector<std::pair<int, int>>>>) {
+            Container adj(n + 1);  // 1-based index
+            int u, v, w;
+            for (int i = 0; i < m; i++) {
+                infile >> u >> v >> w;
+                adj[u].push_back({v, w});
+            }
+            return adj;
+
+        } else if constexpr (std::is_same_v<Container, std::vector<std::tuple<int, int, int>>>) {
+            Container edges;
+            edges.reserve(m);
+            int u, v, w;
+            for (int i = 0; i < m; i++) {
+                infile >> u >> v >> w;
+                edges.emplace_back(u, v, w);
+            }
+            return edges;
+    
+        }
+    }
+
+    template <std::ranges::range Container>
+    Container read_tsp(const std::string& filename) {
+        std::ifstream infile(filename);
+        if (!infile) throw std::runtime_error("ERROR!!! Can not open file: " + filename);
+    
+        int n;
+        infile >> n;
+    
+        Container c;
+        c.reserve(n);
+    
+        for (int i = 0; i < n; i++) {
+            if constexpr (std::is_same_v<Container, std::vector<std::pair<double, double>>>) {
+                std::string line;
+                std::getline(infile, line);
+                if (line.empty()) { i--; continue; }
+                std::istringstream iss(line);
+    
+                double x, y;
+                if (iss.peek() >= '0' && iss.peek() <= '9') {
+                    int id;
+                    iss >> id >> x >> y;
+                    c.emplace_back(x, y);
+                } else {
+                    iss >> x >> y;
+                    c.emplace_back(x, y);
+                }
+    
+            } else if constexpr (std::is_same_v<Container, std::vector<std::tuple<int, double, double>>>) {
+                int id; double x, y;
+                infile >> id >> x >> y;
+                c.emplace_back(id, x, y);
+            }
+        }
+    
+        return c;
+    }
+
+    std::pair<std::vector<std::vector<int>>, std::vector<std::vector<int>>>
+    read_two_sat(const std::string& filename) {
+        std::ifstream infile(filename);
+        if (!infile) {
+            throw std::runtime_error("ERROR!!! Can not open file: " + filename);
+        }
+
+        int n; 
+        infile >> n;
+
+        std::vector<std::vector<int>> g(2 * n + 1);
+        std::vector<std::vector<int>> g_rev(2 * n + 1);
+
+        auto var_index = [n](int x) {
+            if (x > 0) return x;
+            else return n + (-x);
+        };
+
+        auto neg = [n](int x) {
+            if (x > n) return x - n;
+            else return x + n;
+        };
+
+        int a, b;
+        while (infile >> a >> b) {
+            int u = var_index(a);
+            int v = var_index(b);
+
+            int not_u = neg(u);
+            int not_v = neg(v);
+
+            g[not_u].push_back(v);
+            g[not_v].push_back(u);
+
+            g_rev[v].push_back(not_u);
+            g_rev[u].push_back(not_v);
+        }
+
+        return {g, g_rev};
+    }
+
+
+    template std::multiset<long long>
+    read_numbers<std::multiset<long long>>(const std::string & );
+
+    template std::vector<long long>
+    read_numbers<std::vector<long long>>(const std::string & );
+
+    template absl::flat_hash_map<int, int>
+    read_numbers<absl::flat_hash_map<int, int>>(const std::string & );
+
+    template std::vector<std::pair<double, double>>
+    read_weight_ungraph<std::vector<std::pair<double, double>>>(const std::string & );
+
+    template std::vector<std::vector<std::pair<long long, long long>>>
+    read_weight_ungraph<std::vector<std::vector<std::pair<long long, long long>>>>(const std::string & );
+
+    template std::vector<std::vector<int>>
+    read_file_kmeans<std::vector<std::vector<int>>>(const std::string & );
+
+    template std::vector<std::array<int, 24>>
+    read_file_kmeans<std::vector<std::array<int, 24>>>(const std::string & );
+
+    template std::vector<std::vector<std::pair<int, int>>>
+    read_graph<std::vector<std::vector<std::pair<int, int>>>>(const std::string & );
+
+    template std::vector<std::tuple<int, int, int>>
+    read_graph<std::vector<std::tuple<int, int, int>>>(const std::string & );
+
+    template std::vector<std::pair<double, double>>
+    read_tsp<std::vector<std::pair<double, double>>>(const std::string & );
+
+    template std::vector<std::tuple<int, double, double>>
+    read_tsp<std::vector<std::tuple<int, double, double>>>(const std::string & );
 
 } // namespace algorithms

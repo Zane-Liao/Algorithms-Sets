@@ -58,4 +58,29 @@ namespace algorithms {
     }
     // #endif
 
+
+    template<class Median>
+    void benchmark_median(const std::vector<long long> nums, const std::string& name) {
+        Median median;
+        long long sum = 0;
+
+        auto start = std::chrono::high_resolution_clock::now();
+
+        for (long long x : nums) {
+            median.insert(x);
+            sum += median.get_median();
+        }
+
+        auto end = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+
+        std::cout << name <<  " result = " << (sum % 10000) << ", time = " << duration.count() << " ms\n";
+    }
+
+    template void
+    benchmark_median<MedianHeap>(const std::vector<long long>, const std::string&);
+
+    template void
+    benchmark_median<MedianBST>(const std::vector<long long>, const std::string&);
+
 } // namespace algorithms
