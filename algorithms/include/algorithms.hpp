@@ -52,17 +52,17 @@ namespace algorithms {
 
     class Kosaraju {
         public:
-            Kosaraju(int n, std::vector<std::vector<int>>& edges);
+            Kosaraju ( int n, std::vector<std::vector<int>>& edges );
 
-            void dfs1(int u);
-            void dfs2(int u, std::vector<int>& comp);
+            void dfs1 ( int u );
+            void dfs2 ( int u, std::vector<int>& comp );
 
-            std::vector<std::vector<int>> find_acc();
+            std::vector<std::vector<int>> find_acc ();
 
         private:
-            std::vector<std::vector<int>> adj, rev;
-            std::vector<int> vis, order;
-            int n;
+            std::vector<std::vector<int>> _adj, _rev;
+            std::vector<int> _vis, _order;
+            int _n;
     };
 
 
@@ -79,9 +79,9 @@ namespace algorithms {
 
     class MedianHeap {
         public:
-            void insert(long long x);
+            void insert ( long long x );
             
-            long long get_median() const;
+            long long get_median () const;
 
         private:
             std::priority_queue<long long> _left_heap;
@@ -90,12 +90,12 @@ namespace algorithms {
 
     class MedianBST {
         public:
-            void insert(long long x);
+            void insert ( long long x );
 
-            long long get_median() const;
+            long long get_median () const;
         private:
-            std::multiset<long long> data;
-            std::multiset<long long>::iterator mid;
+            std::multiset<long long> _data;
+            std::multiset<long long>::iterator mid_;
     };
 
     template<class Median>
@@ -122,12 +122,26 @@ namespace algorithms {
     long long prim(std::vector<std::vector<std::pair<long long, long long>>> adj_);
 
 
-    // Define k-means clustering algorithm
+    // Define kruskal clustering algorithm
     template <std::ranges::range Container>
-    Container read_file_kmeans(const std::string& filename);
+    Container read_file_kclustering(const std::string& filename);
 
-    // template <std::ranges::range Container>
-    // Container k_means(Container container);
+    class WUnionFindDSPath {
+        public:
+            explicit WUnionFindDSPath (int n);
+
+            int __find__ ( int x );
+
+            void __union__ ( int x, int y );
+
+        private:
+            std::vector<int> _parent;
+            std::vector<int> _rank;
+    };
+
+    int kruskal_clustering(std::vector<std::vector<int>> container);
+
+    int hamming_clustering(std::vector<std::array<int, 24>> container);
 
 
     // Define the all-pairs shortest-path problem

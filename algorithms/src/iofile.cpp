@@ -200,7 +200,7 @@ namespace algorithms {
     }
 
     template <std::ranges::range Container>
-    Container read_file_kmeans(const std::string& filename) {
+    Container read_file_kclustering(const std::string& filename) {
         std::ifstream infile(filename);
         if (!infile) {
             throw std::runtime_error("ERROR!!! Can not open file: " + filename);
@@ -214,19 +214,9 @@ namespace algorithms {
 
             if constexpr (std::is_same_v<Container, std::vector<std::vector<int>>>) {
                 int u, v, w;
-                int max_node = 0;
-                std::vector<std::tuple<int, int, int>> edges;
-
                 if (!(iss >> u >> v >> w)) continue;
-                edges.push_back({u, v, w});
-                max_node = std::max({max_node, u, v});
 
-                c.assign(max_node+1, std::vector<int>(max_node+1, 0));
-
-                for (auto [a, b, wt] : edges) {
-                    c[a][b] = wt;
-                    c[b][a] = wt;
-                }
+                c.push_back({u, v, w});
 
             } else if constexpr (std::is_same_v<Container, std::vector<std::array<int, 24>>>) {
                 std::array<int, 24> row{};
@@ -368,10 +358,10 @@ namespace algorithms {
     read_weight_ungraph<std::vector<std::vector<std::pair<long long, long long>>>>(const std::string & );
 
     template std::vector<std::vector<int>>
-    read_file_kmeans<std::vector<std::vector<int>>>(const std::string & );
+    read_file_kclustering<std::vector<std::vector<int>>>(const std::string & );
 
     template std::vector<std::array<int, 24>>
-    read_file_kmeans<std::vector<std::array<int, 24>>>(const std::string & );
+    read_file_kclustering<std::vector<std::array<int, 24>>>(const std::string & );
 
     template std::vector<std::vector<std::pair<int, int>>>
     read_graph<std::vector<std::vector<std::pair<int, int>>>>(const std::string & );

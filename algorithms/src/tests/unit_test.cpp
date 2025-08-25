@@ -173,20 +173,20 @@ TEST(MultUnitTest, Prim) {
     EXPECT_EQ(sum_cost, -3612829);
 }
 
-TEST(MultUnitTest, Kmeans) {
+TEST(MultUnitTest, Kruskal) {
     std::string outline = (std::filesystem::path(SOURCE_DIR) / "problemFile/clustering1.txt").string();
 
     std::string big_outline = (std::filesystem::path(SOURCE_DIR) / "problemFile/clustering_big.txt").string();
 
-    auto num_k = algorithms::read_file_kmeans<std::vector<std::vector<int>>>(outline);
+    auto num_k = algorithms::read_file_kclustering<std::vector<std::vector<int>>>(outline);
     std::cout << "num_k: " << num_k.size() << std::endl;
-    // auto sum_k = algorithms::read_file_kmeans<std::vector<std::vector<int>>>(num_k);
-    // EXPECT_EQ(sum_k, 106);
+    auto sum_k = algorithms::kruskal_clustering(num_k);
+    EXPECT_EQ(sum_k, 106);
 
-    auto big_num_k = algorithms::read_file_kmeans<std::vector<std::array<int, 24>>>(big_outline);
+    auto big_num_k = algorithms::read_file_kclustering<std::vector<std::array<int, 24>>>(big_outline);
     std::cout << "big_num_k: " << big_num_k.size() << std::endl;
-    // auto big_sum_k = algorithms::k_means<std::vector<std::array<int, 24>>>(big_num_k);
-    // EXPECT_EQ(big_sum_k, 6118);
+    auto big_sum_k = algorithms::kruskal_clustering(big_num_k);
+    EXPECT_EQ(big_sum_k, 6118);
 }
 
 TEST(MultUnitTest, Huffman) {
