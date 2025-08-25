@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <concepts>
 #include <numeric> // std::iora
+#include <unordered_map>
 
 namespace algorithms {
 
@@ -64,8 +65,67 @@ namespace algorithms {
         return -1;
     }
 
-    int hamming_clustering(std::vector<std::array<int, 24>> container) {
-        
+    unsigned int bits_to_int ( const std::array<int, 24>& bits ) {
+        unsigned int num = 0;
+        for ( int i = 0; i < 24; ++i ) {
+            // 2 => 10, 0101 => 5
+            if ( bits[i] == 1 ) num |= ( 1 << i );
+        }
+        return num;
+    }
+
+    int hamming_clustering ( std::vector<std::array<int, 24>> container ) {
+        int num_nodes = container.size();
+        WUnionFindDSPath dsu( num_nodes );
+        int num_clusters = num_nodes;
+
+        std::unordered_map<unsigned int, int> mask_to_node_id;
+        for ( int i = 0; i < num_nodes; ++i ) {
+            unsigned int mask = bits_to_int( container[i] );
+            if ( mask_to_node_id.count( mask ) ) {
+                int existing_node_id = mask_to_node_id [mask];
+                if ( dsu.__find__( i ) != dsu.__find__( existing_node_id ) ) {
+                    dsu.__union__( i, existing_node_id );
+                    num_clusters--;
+                }
+            } else {
+                mask_to_node_id[mask] = i;
+            }
+        }
+
+        for ( const auto& [mask, node_id] : mask_to_node_id ) {
+            // Find 1
+            for ( int i = 0; i < 24; ++i ) {
+                // mask = 1010, i=2
+                // mask^(1<<2) ==> 1110
+                unsigned int neighbor_mask_1 = mask ^ ( 1 << i );
+                if ( mask_to_node_id.count( neighbor_mask_1 ) ) {
+                    int neighbor_node_id = mask_to_node_id[neighbor_mask_1];
+                    if ( dsu.__find__( node_id ) != dsu.__find__( neighbor_node_id ) ) {
+                        dsu.__union__( node_id, neighbor_node_id );
+                        num_clusters--;
+                    }
+                }
+            }
+
+            // Find 2
+            for ( int i = 0; i < 24; ++i ) {
+                for ( int j = i + 1; j < 24; ++j ) {
+                    // mask = 101010, i=2, j=4
+                    // mask^(1<<2)^(1<<4) ==> 111110
+                    unsigned int neighbor_mask_2 = mask ^ ( 1 << i ) ^ ( 1 << j );
+                    if ( mask_to_node_id.count( neighbor_mask_2 ) ) {
+                        int neighbor_node_id = mask_to_node_id[neighbor_mask_2];
+                        if ( dsu.__find__( node_id ) != dsu.__find__( neighbor_node_id ) ) {
+                            dsu.__union__( node_id, neighbor_node_id );
+                            num_clusters--;
+                        }
+                    }
+                }
+            }
+        }
+
+        return num_clusters;
     }
 
 } // namespace algorithms

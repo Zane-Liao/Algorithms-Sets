@@ -185,7 +185,7 @@ TEST(MultUnitTest, Kruskal) {
 
     auto big_num_k = algorithms::read_file_kclustering<std::vector<std::array<int, 24>>>(big_outline);
     std::cout << "big_num_k: " << big_num_k.size() << std::endl;
-    auto big_sum_k = algorithms::kruskal_clustering(big_num_k);
+    auto big_sum_k = algorithms::hamming_clustering(big_num_k);
     EXPECT_EQ(big_sum_k, 6118);
 }
 

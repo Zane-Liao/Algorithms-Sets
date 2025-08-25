@@ -141,7 +141,7 @@ namespace algorithms {
 
     int kruskal_clustering(std::vector<std::vector<int>> container);
 
-    int hamming_clustering(std::vector<std::array<int, 24>> container);
+    int hamming_clustering ( std::vector<std::array<int, 24>> container );
 
 
     // Define the all-pairs shortest-path problem
