@@ -3,16 +3,17 @@
 #include <queue>
 #include <ranges>
 #include <algorithm>
+#include <inttypes.h>
 
 namespace algorithms {
 
-    long long prim(std::vector<std::vector<std::pair<long long, long long>>> adj_) {
+    int64_t prim(std::vector<std::vector<std::pair<int64_t, int64_t>>> adj_) {
         if (adj_.empty()) return 0;
         std::vector<bool> visited_(adj_.size(), false);
-        long long cost_weight = 0;
+        int64_t cost_weight = 0;
 
-        std::priority_queue<std::pair<long long, long long>,
-        std::vector<std::pair<long long, long long>>,
+        std::priority_queue<std::pair<int64_t, int64_t>,
+        std::vector<std::pair<int64_t, int64_t>>,
         std::greater<>> pq;
 
         pq.push({0, 0});

@@ -14,6 +14,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <inttypes.h>
 
 namespace algorithms {
 
@@ -141,11 +142,11 @@ namespace algorithms {
 
         while (std::getline(infile, outline)) {
             std::istringstream iss(outline);
-            long long x;
+            int64_t x;
             while (iss >> x) {
-                if constexpr (std::is_same_v<Container, std::multiset<long long>>) {
+                if constexpr (std::is_same_v<Container, std::multiset<int64_t>>) {
                     c.insert(x);
-                } else if constexpr (std::is_same_v<Container, std::vector<long long>>) {
+                } else if constexpr (std::is_same_v<Container, std::vector<int64_t>>) {
                     c.push_back(x);
                 } else if constexpr (std::is_same_v<Container, absl::flat_hash_map<int, int>>) {
                     c[x]++;
@@ -168,7 +169,7 @@ namespace algorithms {
         std::string outline;
         int max_node = 0;
 
-        std::vector<std::tuple<long long, long long, long long>> edges;
+        std::vector<std::tuple<int64_t, int64_t, int64_t>> edges;
         while (std::getline(infile, outline)) {
             std::istringstream iss(outline);
 
@@ -177,7 +178,7 @@ namespace algorithms {
                 while (iss >> n >> w) {
                     c.push_back({n, w});
                 }
-            } else if constexpr (std::is_same_v<Container, std::vector<std::vector<std::pair<long long, long long>>>>) {
+            } else if constexpr (std::is_same_v<Container, std::vector<std::vector<std::pair<int64_t, int64_t>>>>) {
                 int u, v, w;
                 while (iss >> u >> v >> w) {
                     u--; v--;
@@ -186,7 +187,7 @@ namespace algorithms {
                 }
             }
 
-            if constexpr (std::is_same_v<Container, std::vector<std::vector<std::pair<long long, long long>>>>) {
+            if constexpr (std::is_same_v<Container, std::vector<std::vector<std::pair<int64_t, int64_t>>>>) {
                 c.resize(max_node + 1);
                 for (auto [u, v, w] : edges) {
                     // pair<v, w>
@@ -342,11 +343,11 @@ namespace algorithms {
     }
 
 
-    template std::multiset<long long>
-    read_numbers<std::multiset<long long>>(const std::string & );
+    template std::multiset<int64_t>
+    read_numbers<std::multiset<int64_t>>(const std::string & );
 
-    template std::vector<long long>
-    read_numbers<std::vector<long long>>(const std::string & );
+    template std::vector<int64_t>
+    read_numbers<std::vector<int64_t>>(const std::string & );
 
     template absl::flat_hash_map<int, int>
     read_numbers<absl::flat_hash_map<int, int>>(const std::string & );
@@ -354,8 +355,8 @@ namespace algorithms {
     template std::vector<std::pair<double, double>>
     read_weight_ungraph<std::vector<std::pair<double, double>>>(const std::string & );
 
-    template std::vector<std::vector<std::pair<long long, long long>>>
-    read_weight_ungraph<std::vector<std::vector<std::pair<long long, long long>>>>(const std::string & );
+    template std::vector<std::vector<std::pair<int64_t, int64_t>>>
+    read_weight_ungraph<std::vector<std::vector<std::pair<int64_t, int64_t>>>>(const std::string & );
 
     template std::vector<std::vector<int>>
     read_file_kclustering<std::vector<std::vector<int>>>(const std::string & );

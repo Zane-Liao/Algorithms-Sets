@@ -15,6 +15,7 @@
 #include <algorithm>
 #include <filesystem>
 #include <chrono>
+#include <inttypes.h>
 // #include <bits/stdc++.h>
 
 // This algorithm is random and the test is prone to errors.
@@ -65,7 +66,7 @@ TEST(MultUnitTest, Dijkstra) {
 TEST(MultUnitTest, 2Sum) {
     std::string outline = (std::filesystem::path(SOURCE_DIR) / "problemFile/algo1-programming_prob-2sum.txt").string();
 
-    auto nums = algorithms::read_numbers<std::vector<long long>>(outline);
+    auto nums = algorithms::read_numbers<std::vector<int64_t>>(outline);
 
     std::cout << nums.size() << std::endl;
 
@@ -77,11 +78,11 @@ TEST(MultUnitTest, 2Sum) {
 TEST(MultUnitTest, Median) {
     std::string outline = (std::filesystem::path(SOURCE_DIR) / "problemFile/Median.txt").string();
 
-    auto num_heap = algorithms::read_numbers<std::vector<long long>>(outline);
-    long long _sum_heap = 0;
+    auto num_heap = algorithms::read_numbers<std::vector<int64_t>>(outline);
+    int64_t _sum_heap = 0;
 
     algorithms::MedianHeap heap;
-    for (long long num : num_heap) {
+    for (int64_t num : num_heap) {
         heap.insert( num );
         _sum_heap += heap.get_median();
     }
@@ -89,11 +90,11 @@ TEST(MultUnitTest, Median) {
 
     EXPECT_EQ((_sum_heap % 10000), 1213);
 
-    auto num_bst = algorithms::read_numbers<std::vector<long long>>(outline);
-    long long _sum_bst = 0;
+    auto num_bst = algorithms::read_numbers<std::vector<int64_t>>(outline);
+    int64_t _sum_bst = 0;
 
     algorithms::MedianBST bst;
-    for (long long num : num_bst) {
+    for (int64_t num : num_bst) {
         bst.insert( num );
         _sum_bst += bst.get_median();
     }
@@ -154,19 +155,19 @@ TEST(MultUnitTest, MiniWeightSum) {
 
     auto num_weight = algorithms::read_weight_ungraph<std::vector<std::pair<double, double>>>(outline);
 
-    long long sum_diff = algorithms::mini_weight_sum_diff(num_weight);
+    int64_t sum_diff = algorithms::mini_weight_sum_diff(num_weight);
     EXPECT_EQ(sum_diff, 69119377652);
 
-    long long sum_scale = algorithms::mini_weight_sum_scale(num_weight);
+    int64_t sum_scale = algorithms::mini_weight_sum_scale(num_weight);
     EXPECT_EQ(sum_scale, 67311454237);
 }
 
 TEST(MultUnitTest, Prim) {
     std::string outline = (std::filesystem::path(SOURCE_DIR) / "problemFile/edges.txt").string();
 
-    auto num_ungraph = algorithms::read_weight_ungraph<std::vector<std::vector<std::pair<long long, long long>>>>(outline);
+    auto num_ungraph = algorithms::read_weight_ungraph<std::vector<std::vector<std::pair<int64_t, int64_t>>>>(outline);
 
-    long long sum_cost = algorithms::prim(num_ungraph);
+    int64_t sum_cost = algorithms::prim(num_ungraph);
 
     std::cout << "sum cost: " << sum_cost << std::endl;
 
@@ -192,15 +193,28 @@ TEST(MultUnitTest, Kruskal) {
 TEST(MultUnitTest, Huffman) {
     std::string outline = (std::filesystem::path(SOURCE_DIR) / "problemFile/huffman.txt").string();
 
-    auto huffman_weight = algorithms::read_numbers<std::vector<long long>>(outline);
-
+    auto huffman_weight = algorithms::read_numbers<std::vector<int64_t>>(outline);
+    ASSERT_FALSE(huffman_weight.empty()) << "huffman.txt is empty!";
     std::cout << "huffman weight: " << huffman_weight.size() << std::endl;
+
+    auto code = algorithms::huffman_code(huffman_weight);
+
+    std::cout << "weights count: " << huffman_weight.size() << std::endl;
+    for (int i = 0; i < std::min((size_t)10, huffman_weight.size()); i++) {
+        std::cout << huffman_weight[i] << " ";
+    }
+    std::cout << std::endl;
+
+    auto [min_len, max_len] = algorithms::bfs_huffman(code);
+
+    EXPECT_EQ(min_len, 9);
+    EXPECT_EQ(max_len, 19);
 }
 
 TEST(MultUnitTest, Mwis) {
     std::string outline = (std::filesystem::path(SOURCE_DIR) / "problemFile/mwis.txt").string();
 
-    auto mwis = algorithms::read_numbers<std::vector<long long>>(outline);
+    auto mwis = algorithms::read_numbers<std::vector<int64_t>>(outline);
 
     std::cout << "mwis: " << mwis.size() << std::endl;
 }

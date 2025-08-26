@@ -3,10 +3,11 @@
 #include <algorithm>
 #include <set>
 #include <queue>
+#include <inttypes.h>
 
 namespace algorithms {
 
-    void MedianHeap::insert ( long long x ) {
+    void MedianHeap::insert ( int64_t x ) {
 
         if ( _left_heap.empty() || x <= _left_heap.top() ) {
             _left_heap.push( x );
@@ -24,12 +25,12 @@ namespace algorithms {
 
     }
 
-    long long MedianHeap::get_median () const {
+    int64_t MedianHeap::get_median () const {
         return _left_heap.top();
     }
 
     // #if BST
-    void MedianBST::insert ( long long x ) {
+    void MedianBST::insert ( int64_t x ) {
 
         if ( _data.empty() ) {
             _data.insert( x );
@@ -53,20 +54,20 @@ namespace algorithms {
     // #endif
 
     // #if BST
-    long long MedianBST::get_median () const {
+    int64_t MedianBST::get_median () const {
         return *mid_;
     }
     // #endif
 
 
     template<class Median>
-    void benchmark_median(const std::vector<long long> nums, const std::string& name) {
+    void benchmark_median(const std::vector<int64_t> nums, const std::string& name) {
         Median median;
-        long long sum = 0;
+        int64_t sum = 0;
 
         auto start = std::chrono::high_resolution_clock::now();
 
-        for (long long x : nums) {
+        for (int64_t x : nums) {
             median.insert(x);
             sum += median.get_median();
         }
@@ -78,9 +79,9 @@ namespace algorithms {
     }
 
     template void
-    benchmark_median<MedianHeap>(const std::vector<long long>, const std::string&);
+    benchmark_median<MedianHeap>(const std::vector<int64_t>, const std::string&);
 
     template void
-    benchmark_median<MedianBST>(const std::vector<long long>, const std::string&);
+    benchmark_median<MedianBST>(const std::vector<int64_t>, const std::string&);
 
 } // namespace algorithms

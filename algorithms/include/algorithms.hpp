@@ -4,6 +4,7 @@
 #include <queue>
 #include <cmath>
 #include <vector>
+#include <memory>
 #include <algorithm>
 #include <chrono>
 #include <ranges> // std::range::range => STL
@@ -17,6 +18,7 @@
 #include <cstddef>
 #include <gmpxx.h>
 #include <time.h>
+#include <inttypes.h>
 #include "absl/container/flat_hash_map.h"
 
 namespace algorithms {
@@ -59,7 +61,7 @@ namespace algorithms {
 
             std::vector<std::vector<int>> find_acc ();
 
-        private:
+        protected:
             std::vector<std::vector<int>> _adj, _rev;
             std::vector<int> _vis, _order;
             int _n;
@@ -79,31 +81,31 @@ namespace algorithms {
 
     class MedianHeap {
         public:
-            void insert ( long long x );
+            void insert ( int64_t x );
             
-            long long get_median () const;
+            int64_t get_median () const;
 
-        private:
-            std::priority_queue<long long> _left_heap;
-            std::priority_queue<long long, std::vector<long long>, std::greater<>> _right_heap;
+        protected:
+            std::priority_queue<int64_t> _left_heap;
+            std::priority_queue<int64_t, std::vector<int64_t>, std::greater<>> _right_heap;
     };
 
     class MedianBST {
         public:
-            void insert ( long long x );
+            void insert ( int64_t x );
 
-            long long get_median () const;
-        private:
-            std::multiset<long long> _data;
-            std::multiset<long long>::iterator mid_;
+            int64_t get_median () const;
+        protected:
+            std::multiset<int64_t> _data;
+            std::multiset<int64_t>::iterator mid_;
     };
 
     template<class Median>
-    void benchmark_median(const std::vector<long long> nums, const std::string& name);
+    void benchmark_median(const std::vector<int64_t> nums, const std::string& name);
 
 
     // Define 2-sum Algorithm
-    int two_sum(std::vector<long long>& nums);
+    int two_sum(std::vector<int64_t>& nums);
 
 
     // Read weight and ungraph
@@ -112,14 +114,14 @@ namespace algorithms {
 
     // Define Greedy Algorithms
     // looking for minimizing the weighted sum of completion times
-    long long mini_weight_sum_diff(std::vector<std::pair<double, double>> nums);
+    int64_t mini_weight_sum_diff(std::vector<std::pair<double, double>> nums);
 
     // Optimal version algorithm
-    long long mini_weight_sum_scale(std::vector<std::pair<double, double>> nums);
+    int64_t mini_weight_sum_scale(std::vector<std::pair<double, double>> nums);
 
 
     // Define Prim's minimum spanning tree algorithm
-    long long prim(std::vector<std::vector<std::pair<long long, long long>>> adj_);
+    int64_t prim(std::vector<std::vector<std::pair<int64_t, int64_t>>> adj_);
 
 
     // Define kruskal clustering algorithm
@@ -128,13 +130,13 @@ namespace algorithms {
 
     class WUnionFindDSPath {
         public:
-            explicit WUnionFindDSPath (int n);
+            explicit WUnionFindDSPath ( int n );
 
             int __find__ ( int x );
 
             void __union__ ( int x, int y );
 
-        private:
+        protected:
             std::vector<int> _parent;
             std::vector<int> _rank;
     };
@@ -142,6 +144,29 @@ namespace algorithms {
     int kruskal_clustering(std::vector<std::vector<int>> container);
 
     int hamming_clustering ( std::vector<std::array<int, 24>> container );
+
+
+    // Define huffman code algorithm
+    class HuffmanNode {
+        public:
+            int64_t weight;
+            std::unique_ptr<HuffmanNode> left;
+            std::unique_ptr<HuffmanNode> right;
+
+            HuffmanNode ( int64_t w );
+
+            HuffmanNode (
+                int64_t w,
+                std::unique_ptr<HuffmanNode> l,
+                std::unique_ptr<HuffmanNode> r
+            );
+    };
+
+    std::unique_ptr<HuffmanNode> huffman_code(std::vector<int64_t>& weights);
+
+    std::pair<int64_t, int64_t> bfs_huffman(const std::unique_ptr<HuffmanNode>& root);
+
+    // Define mwis algorithm
 
 
     // Define the all-pairs shortest-path problem

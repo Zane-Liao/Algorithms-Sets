@@ -2,11 +2,12 @@
 #include <set>
 #include <vector>
 #include <algorithm>
+#include <inttypes.h>
 #include "absl/container/flat_hash_map.h"
 
 namespace algorithms {
 
-    int two_sum(std::vector<long long>& nums) {
+    int two_sum(std::vector<int64_t>& nums) {
 
         // 1. sort
         sort(nums.begin(), nums.end());
@@ -21,7 +22,7 @@ namespace algorithms {
         int left = 0, right = nums.size() - 1;
 
         while (left < right) {
-            long long sum = nums[left] + nums[right];
+            int64_t sum = nums[left] + nums[right];
             if (sum < MIN_T) {
                 left++;
             } else if (sum > MAX_T) {
