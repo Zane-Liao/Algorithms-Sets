@@ -1,6 +1,7 @@
 #pragma once
 
 #include <set>
+#include <span>
 #include <queue>
 #include <cmath>
 #include <vector>
@@ -167,7 +168,9 @@ namespace algorithms {
     std::pair<int64_t, int64_t> bfs_huffman(const std::unique_ptr<HuffmanNode>& root);
 
     // Define mwis algorithm
+    std::vector<int64_t> mwis(const std::vector<int64_t>& numbers);
 
+    std::unordered_set<int64_t> reconstruct_mwis(const std::vector<int64_t>& dp, const std::vector<int64_t>& numbers);
 
     // Define the all-pairs shortest-path problem
     template <std::ranges::range Container>

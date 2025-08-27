@@ -199,12 +199,6 @@ TEST(MultUnitTest, Huffman) {
 
     auto code = algorithms::huffman_code(huffman_weight);
 
-    std::cout << "weights count: " << huffman_weight.size() << std::endl;
-    for (int i = 0; i < std::min((size_t)10, huffman_weight.size()); i++) {
-        std::cout << huffman_weight[i] << " ";
-    }
-    std::cout << std::endl;
-
     auto [min_len, max_len] = algorithms::bfs_huffman(code);
 
     EXPECT_EQ(min_len, 9);
@@ -214,9 +208,22 @@ TEST(MultUnitTest, Huffman) {
 TEST(MultUnitTest, Mwis) {
     std::string outline = (std::filesystem::path(SOURCE_DIR) / "problemFile/mwis.txt").string();
 
-    auto mwis = algorithms::read_numbers<std::vector<int64_t>>(outline);
+    auto mwis_weight = algorithms::read_numbers<std::vector<int64_t>>(outline);
 
-    std::cout << "mwis: " << mwis.size() << std::endl;
+    std::cout << "mwis: " << mwis_weight.size() << std::endl;
+
+    auto dp = algorithms::mwis(mwis_weight);
+
+    auto S = algorithms::reconstruct_mwis(dp, mwis_weight);
+
+    const std::vector<int64_t> test_num = {1, 2, 3, 4, 17, 117, 517, 997};
+
+    std::string result;
+    for (auto a : test_num) {
+        result.push_back(S.contains(a) ? '1' : '0');
+    }
+
+    EXPECT_EQ(result, "10100110");
 }
 
 TEST(MultUnitTest, Knapsack) {
