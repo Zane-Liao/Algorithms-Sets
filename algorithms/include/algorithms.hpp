@@ -69,13 +69,7 @@ namespace algorithms {
     };
 
 
-    // Define Djikstra's algorithm
-    std::vector<std::vector<std::pair<int, int>>> read_adj_weight(const std::string& filename);
-
-    // To Only use non-negative weights
-    std::vector<int> dijkstra(int n, int start, std::vector<std::vector<std::pair<int, int>>> adj);
-
-
+    /* Online Algorithm */
     // Define Median maintenance algorithm
     template<std::ranges::range Container>
     Container read_numbers(const std::string& filename);
@@ -113,7 +107,14 @@ namespace algorithms {
     template<std::ranges::range Container>
     Container read_weight_ungraph(const std::string& filename);
 
-    // Define Greedy Algorithms
+    /* Greedy Algorithms */
+    // Define Djikstra's algorithm
+    std::vector<std::vector<std::pair<int, int>>> read_adj_weight(const std::string& filename);
+
+    // To Only use non-negative weights
+    std::vector<int> dijkstra(int n, int start, std::vector<std::vector<std::pair<int, int>>> adj);
+
+
     // looking for minimizing the weighted sum of completion times
     int64_t mini_weight_sum_diff(std::vector<std::pair<double, double>> nums);
 
@@ -167,10 +168,19 @@ namespace algorithms {
 
     std::pair<int64_t, int64_t> bfs_huffman(const std::unique_ptr<HuffmanNode>& root);
 
-    // Define mwis algorithm
+
+    /* Define Dynamic Programming Algorithms */
+    // cs161-Lecture13_notes ==> Algorithm 5: MaxWeightIndependentSet(G)
     std::vector<int64_t> mwis(const std::vector<int64_t>& numbers);
 
     std::unordered_set<int64_t> reconstruct_mwis(const std::vector<int64_t>& dp, const std::vector<int64_t>& numbers);
+
+
+    // Solve Knapsack Problem
+    // cs161-Lecture13_notes ==> Algorithm 3: UnboundedKnapsack(W, n, w , v )
+    // Space: O(W) Time: O(n*W)
+    int64_t knapsack_1d(const std::vector<std::pair<int64_t, int64_t>>& pairs, int64_t capacity);
+
 
     // Define the all-pairs shortest-path problem
     template <std::ranges::range Container>

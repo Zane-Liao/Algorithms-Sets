@@ -43,7 +43,6 @@ namespace algorithms {
     }
 
     std::vector<std::vector<int>> read_edge_mmap(const std::string& filename) {
-        // some c style
         int fd = open(filename.c_str(), O_RDONLY);
         if (fd == -1) {
             throw std::runtime_error("ERROR!!! can not open file: " + filename);
@@ -51,50 +50,44 @@ namespace algorithms {
         struct stat sb;
         fstat(fd, &sb);
         size_t sz = sb.st_size;
-        // mmap syscall
         char* data = static_cast<char*>(mmap(nullptr, sz, PROT_READ, MAP_PRIVATE, fd, 0));
         if (data == MAP_FAILED) {
             close(fd);
             throw std::runtime_error("ERROR!!! Falied to mmap file");
         }
         close(fd);
-
-        std::vector<std::vector<int>> adj;
+    
+        std::vector<std::vector<int>> edge_list;
         const char* p = data;
         const char* end = data + sz;
         int u, v;
-
-        // lambda
+        int max_node = 0;
+    
         auto readInt = [&](int &x) -> bool {
-            // Is p a number? true => ++p false => 
             while (p < end && !isdigit(*p)) ++p;
             if (p >= end) return false;
             int val = 0;
             while (p < end && isdigit(*p)) {
-                // *'3' - '0' = 51 - 48 = 3
-                // val = 0 * 10 + (1) = 1 => val = 1 * 10 + (2) = 12
                 val = val * 10 + (*p - '0');
                 ++p;
             }
             x = val;
             return true;
         };
-
+    
         while (readInt(u) && readInt(v)) {
-            --u, --v;
-            int n = fmax(u+1, v+1);
-            if ((int)adj.size() < n) adj.resize(n);
-            adj[u].push_back(v);
+            edge_list.push_back({u, v});
         }
-
+    
         if (munmap(data, sz) == -1) {
             throw std::runtime_error(
                 "ERROR!!! munmap falied: " + std::string(strerror(errno))
             );
         }
-        std::cerr << "[mmap-simple] nodes = " << adj.size() <<std::endl;
         
-        return adj;
+        // std::cerr << "[mmap-simple] nodes = " << adj.size() <<std::endl;
+        
+        return edge_list;
     }
 
     std::vector<std::vector<std::pair<int, int>>> read_adj_weight(const std::string& filename) {
@@ -184,6 +177,11 @@ namespace algorithms {
                     u--; v--;
                     edges.push_back({u, v, w});
                     max_node = std::max({max_node, u, v});
+                }
+            } else if constexpr (std::is_same_v<Container, std::vector<std::pair<int64_t, int64_t>>>) {
+                int n, w;
+                while (iss >> n >> w) {
+                    c.push_back({n, w});
                 }
             }
 
@@ -354,6 +352,9 @@ namespace algorithms {
 
     template std::vector<std::pair<double, double>>
     read_weight_ungraph<std::vector<std::pair<double, double>>>(const std::string & );
+
+    template std::vector<std::pair<int64_t, int64_t>>
+    read_weight_ungraph<std::vector<std::pair<int64_t, int64_t>>>(const std::string & );
 
     template std::vector<std::vector<std::pair<int64_t, int64_t>>>
     read_weight_ungraph<std::vector<std::vector<std::pair<int64_t, int64_t>>>>(const std::string & );

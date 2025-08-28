@@ -131,21 +131,37 @@ TEST(MultUnitTest, Karger) {
 
 TEST(MultUnitTest, Scc) {
     std::string outline = (std::filesystem::path(SOURCE_DIR) / "problemFile/scc.txt").string();
-    std::vector<std::vector<int>> adj;
-    
-    adj = algorithms::read_edge_mmap(outline);
 
-    algorithms::Kosaraju solver((int)adj.size(), adj);
-    auto ans = solver.find_acc();
-    std::vector<int> result;
-    for (auto& comp : ans) {
-        for (int v : comp) {
-            result.push_back(v);
-        }
+    std::vector<std::vector<int>> edge_list = algorithms::read_edge_mmap(outline);
+
+    int max_node = 0;
+    for (const auto& edge : edge_list) {
+        if (edge[0] > max_node) max_node = edge[0];
+        if (edge[1] > max_node) max_node = edge[1];
     }
 
-    std::vector<int> answer2 = {434821, 968, 459, 313, 211};
-    EXPECT_EQ(result, answer2);
+    algorithms::Kosaraju solver(max_node, edge_list);
+    auto sccs = solver.find_acc();
+
+    std::vector<int> scc_sizes;
+    for (const auto& component : sccs) {
+        scc_sizes.push_back(component.size());
+    }
+
+    std::sort(scc_sizes.rbegin(), scc_sizes.rend());
+
+    std::vector<int> result;
+    for (size_t i = 0; i < 5 && i < scc_sizes.size(); ++i) {
+        result.push_back(scc_sizes[i]);
+    }
+
+    while (result.size() < 5) {
+        result.push_back(0);
+    }
+
+    std::vector<int> answer = {434821, 968, 459, 313, 211};
+    
+    EXPECT_EQ(result, answer);
 }
 
 // ---------------------------------------------------------------------------------------------------------------------------------------
@@ -228,12 +244,20 @@ TEST(MultUnitTest, Mwis) {
 
 TEST(MultUnitTest, Knapsack) {
     std::string outline = (std::filesystem::path(SOURCE_DIR) / "problemFile/knapsack1.txt").string();
-    auto knapsack = algorithms::read_weight_ungraph<std::vector<std::pair<double, double>>>(outline);
+    auto knapsack = algorithms::read_weight_ungraph<std::vector<std::pair<int64_t, int64_t>>>(outline);
     std::cout << "knapsack: " << knapsack.size() << std::endl;
 
+    int64_t result_1 = algorithms::knapsack_1d(knapsack, 10000);
+
+    EXPECT_EQ(result_1, 2493893);
+
     std::string big_outline = (std::filesystem::path(SOURCE_DIR) / "problemFile/knapsack_big.txt").string();
-    auto big_knapsack = algorithms::read_weight_ungraph<std::vector<std::pair<double, double>>>(big_outline);
+    auto big_knapsack = algorithms::read_weight_ungraph<std::vector<std::pair<int64_t, int64_t>>>(big_outline);
     std::cout << "big knapsack: " << big_knapsack.size() << std::endl;
+
+    int64_t result_2 = algorithms::knapsack_1d(big_knapsack, 2000000);
+
+    EXPECT_EQ(result_2, 4243395);
 }
 
 TEST(MultUnitTest, Graph) {

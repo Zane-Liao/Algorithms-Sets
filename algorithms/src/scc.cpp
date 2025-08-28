@@ -12,11 +12,13 @@ namespace algorithms {
         this->_n = n;
         _adj.assign( n + 1, { } );
         _rev.assign( n + 1, { } );
-        _vis.assign( n + 1, 0 );
+        _vis.assign( n + 1, false );
 
-        for ( auto& e : edges ) {
-            _adj[e[0]].push_back( e[1] );
-            _rev[e[1]].push_back( e[0] );
+        for ( const auto& e : edges ) {
+            if ( e[0] <= n && e[1] <= n ) {
+                _adj[e[0]].push_back( e[1] );
+                _rev[e[1]].push_back( e[0] );
+            }
         }
     }
 
@@ -40,13 +42,15 @@ namespace algorithms {
         _order.clear();
         std::fill( _vis.begin(), _vis.end(), 0 );
 
-        for ( int i = 1; i < _n; i++ ) {
+        for ( int i = 1; i <= _n; i++ ) {
             if ( !_vis[i] ) dfs1( i );
         }
 
         std::fill( _vis.begin(), _vis.end(), 0 );
         std::vector<std::vector<int>> sccs;
-        reverse( _order.begin(), _order.end() );
+
+        std::reverse( _order.begin(), _order.end() );
+
         for ( int u : _order ) {
             if ( !_vis[u] ) {
                 std::vector<int> comp;
