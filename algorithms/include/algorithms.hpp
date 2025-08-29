@@ -1,3 +1,8 @@
+/* All Graph Algorithms
+Determine whether a graph is [sparse] or [dense], use $D = \frac{E}{V^{2}}$
+$D \le 0.01$ ==> sparse, $D \ge 0.1$ ==> dense
+sparse: $E = O(V)$, dense: $E = O(V^{2})$
+*/
 #pragma once
 
 #include <set>
@@ -60,7 +65,7 @@ namespace algorithms {
             void dfs1 ( int u );
             void dfs2 ( int u, std::vector<int>& comp );
 
-            std::vector<std::vector<int>> find_acc ();
+            std::vector<std::vector<int>> find_scc ();
 
         protected:
             std::vector<std::vector<int>> _adj, _rev;
@@ -186,14 +191,21 @@ namespace algorithms {
     template <std::ranges::range Container>
     Container read_graph(const std::string& filename);
 
+    // cs161-Lecture11_notes ==> Algorithm 2: Bellman-Ford Algorithm
+    // Space: O(n^2) Time: O(m*n)
+    std::vector<int64_t> bellman_ford(const std::vector<std::vector<std::pair<int, int>>>& g);
 
+    // Dijkstra + Bellman Ford + Recalibrate edge weights = Johnson_algorithm
+    int64_t johnson_algorithm(const std::vector<std::vector<std::pair<int, int>>>& g);
+
+
+    /* Define NP-Complete Problem */
     // Define tsp Problem
     template <std::ranges::range Container>
     Container read_tsp(const std::string& filename);
 
 
     // Define 2SAT problem
-    std::pair<std::vector<std::vector<int>>, std::vector<std::vector<int>>>
-    read_two_sat(const std::string& filename);
+    std::pair<std::vector<std::vector<int>>, std::vector<std::vector<int>>> read_two_sat(const std::string& filename);
 
 } // namespace algorithms

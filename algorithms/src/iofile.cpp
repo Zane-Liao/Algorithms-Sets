@@ -299,8 +299,7 @@ namespace algorithms {
         return c;
     }
 
-    std::pair<std::vector<std::vector<int>>, std::vector<std::vector<int>>>
-    read_two_sat(const std::string& filename) {
+    std::pair<std::vector<std::vector<int>>, std::vector<std::vector<int>>> read_two_sat(const std::string& filename) {
         std::ifstream infile(filename);
         if (!infile) {
             throw std::runtime_error("ERROR!!! Can not open file: " + filename);

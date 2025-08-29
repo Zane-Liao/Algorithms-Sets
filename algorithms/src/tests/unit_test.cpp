@@ -23,6 +23,7 @@
 // The default is 2 compilation, or check CmakeLists.txt to change
 // add_compile_definitions(RUN_TEST_MINCUT=nums)
 #define RUN_TEST_MINCUT 1
+#define G 3
 
 TEST(MultUnitTest, Karatsuba1) {
     EXPECT_EQ(algorithms::karatsuba(20, 20), 400);
@@ -141,7 +142,7 @@ TEST(MultUnitTest, Scc) {
     }
 
     algorithms::Kosaraju solver(max_node, edge_list);
-    auto sccs = solver.find_acc();
+    auto sccs = solver.find_scc();
 
     std::vector<int> scc_sizes;
     for (const auto& component : sccs) {
@@ -153,10 +154,6 @@ TEST(MultUnitTest, Scc) {
     std::vector<int> result;
     for (size_t i = 0; i < 5 && i < scc_sizes.size(); ++i) {
         result.push_back(scc_sizes[i]);
-    }
-
-    while (result.size() < 5) {
-        result.push_back(0);
     }
 
     std::vector<int> answer = {434821, 968, 459, 313, 211};
@@ -260,23 +257,53 @@ TEST(MultUnitTest, Knapsack) {
     EXPECT_EQ(result_2, 4243395);
 }
 
-TEST(MultUnitTest, Graph) {
+#if G == 1
+TEST(MultUnitTest, GraphG1) {
     std::string outline_g1 = (std::filesystem::path(SOURCE_DIR) / "problemFile/g1.txt").string();
     auto g1 = algorithms::read_graph<std::vector<std::vector<std::pair<int, int>>>>(outline_g1);
     std::cout << "g1: " << g1.size() << std::endl;
 
+    auto g1_result = algorithms::johnson_algorithm(g1);
+    std::cout << "g1_result: " << g1_result << std::endl;
+    EXPECT_EQ(g1_result, -19);
+}
+#endif
+
+#if G == 2
+TEST(MultUnitTest, GraphG2) {
     std::string outline_g2 = (std::filesystem::path(SOURCE_DIR) / "problemFile/g2.txt").string();
     auto g2 = algorithms::read_graph<std::vector<std::vector<std::pair<int, int>>>>(outline_g2);
     std::cout << "g2: " << g2.size() << std::endl;
 
+    auto g2_result = algorithms::johnson_algorithm(g2);
+    std::cout << "g2_result: " << g2_result << std::endl;
+    EXPECT_EQ(g2_result, -19);
+}
+#endif
+
+#if G == 3
+TEST(MultUnitTest, GraphG3) {
     std::string outline_g3 = (std::filesystem::path(SOURCE_DIR) / "problemFile/g3.txt").string();
     auto g3 = algorithms::read_graph<std::vector<std::vector<std::pair<int, int>>>>(outline_g3);
     std::cout << "g3: " << g3.size() << std::endl;
 
+    auto g3_result = algorithms::johnson_algorithm(g3);
+    std::cout << "g3_result: " << g3_result << std::endl;
+    EXPECT_EQ(g3_result, -19);
+}
+#endif
+
+#if G == 4
+TEST(MultUnitTest, GraphLarge) {
     std::string outline_large = (std::filesystem::path(SOURCE_DIR) / "problemFile/large.txt").string();
     auto large = algorithms::read_graph<std::vector<std::vector<std::pair<int, int>>>>(outline_large);
     std::cout << "large: " << large.size() << std::endl;
+
+    auto min_result = algorithms::johnson_algorithm(large);
+    std::cout << "min_result: " << min_result << std::endl;
+    EXPECT_EQ(min_result, -19);
 }
+#endif
 
 TEST(MultUnitTest, Tsp1) {
     std::string outline = (std::filesystem::path(SOURCE_DIR) / "problemFile/tsp.txt").string();

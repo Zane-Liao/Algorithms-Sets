@@ -38,7 +38,7 @@ namespace algorithms {
         }
     }
 
-    std::vector<std::vector<int>> Kosaraju::find_acc () {
+    std::vector<std::vector<int>> Kosaraju::find_scc () {
         _order.clear();
         std::fill( _vis.begin(), _vis.end(), 0 );
 
